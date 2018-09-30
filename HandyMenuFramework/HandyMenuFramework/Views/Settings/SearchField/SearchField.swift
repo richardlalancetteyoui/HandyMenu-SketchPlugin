@@ -6,11 +6,11 @@
 //  Copyright © 2018 Sergey Dmitriev. All rights reserved.
 //
 
-protocol SearchFieldDelegate: class {
+public protocol SearchFieldDelegate: class {
     func searchField(_ searchField: SearchField, didChanged value: String)
 }
 
-class SearchField: NSView, NSTextFieldDelegate {
+public class SearchField: NSView, NSTextFieldDelegate {
     
     // MARK: - View States
     private enum State {
@@ -93,7 +93,7 @@ class SearchField: NSView, NSTextFieldDelegate {
         self.needsDisplay = true
     }
     
-    override func controlTextDidChange(_ obj: Notification) {
+    override public func controlTextDidChange(_ obj: Notification) {
         self.stringValue = self.textField.stringValue
     }
     

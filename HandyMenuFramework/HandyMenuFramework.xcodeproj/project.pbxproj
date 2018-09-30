@@ -29,6 +29,11 @@
 		A5398D1B21165A8600BD70EF /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5398D1A21165A8600BD70EF /* NSImage.swift */; };
 		A53A829520FF726600FD83FA /* HandyMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A829420FF726600FD83FA /* HandyMenu.swift */; };
 		A54EA40D211910D500C56E01 /* NSNib.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54EA40C211910D500C56E01 /* NSNib.swift */; };
+		A55DF62921615EB900EA9E46 /* SettingsWindowController+NSTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF62821615EB900EA9E46 /* SettingsWindowController+NSTableViewDelegate.swift */; };
+		A55DF62B2161608800EA9E46 /* SettingsWindowController+CollectionTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF62A2161608800EA9E46 /* SettingsWindowController+CollectionTableViewDelegate.swift */; };
+		A55DF62F2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF62E2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift */; };
+		A55DF6312161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF6302161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift */; };
+		A55DF6332161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF6322161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift */; };
 		A58FC0DD20FF83B1004730BB /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58FC0DC20FF83B1004730BB /* Command.swift */; };
 		A58FC0E120FF87F2004730BB /* HMCommandScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = A58FC0DF20FF87F2004730BB /* HMCommandScheme.m */; };
 		A58FC0E220FF87F2004730BB /* HMCommandScheme.h in Headers */ = {isa = PBXBuildFile; fileRef = A58FC0E020FF87F2004730BB /* HMCommandScheme.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -85,6 +90,11 @@
 		A5398D1A21165A8600BD70EF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		A53A829420FF726600FD83FA /* HandyMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandyMenu.swift; sourceTree = "<group>"; };
 		A54EA40C211910D500C56E01 /* NSNib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNib.swift; sourceTree = "<group>"; };
+		A55DF62821615EB900EA9E46 /* SettingsWindowController+NSTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSTableViewDelegate.swift"; sourceTree = "<group>"; };
+		A55DF62A2161608800EA9E46 /* SettingsWindowController+CollectionTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+CollectionTableViewDelegate.swift"; sourceTree = "<group>"; };
+		A55DF62E2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSTableViewDataSource.swift"; sourceTree = "<group>"; };
+		A55DF6302161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSCollectionViewDataSource.swift"; sourceTree = "<group>"; };
+		A55DF6322161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift"; sourceTree = "<group>"; };
 		A58FC0DC20FF83B1004730BB /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		A58FC0DF20FF87F2004730BB /* HMCommandScheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMCommandScheme.m; sourceTree = "<group>"; };
 		A58FC0E020FF87F2004730BB /* HMCommandScheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMCommandScheme.h; sourceTree = "<group>"; };
@@ -215,6 +225,19 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A55DF62D216160C400EA9E46 /* SettingsWindowController */ = {
+			isa = PBXGroup;
+			children = (
+				A5AA666F20FFD1A10027BC45 /* SettingsWindowController.swift */,
+				A55DF6322161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift */,
+				A55DF6302161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift */,
+				A55DF62E2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift */,
+				A55DF62821615EB900EA9E46 /* SettingsWindowController+NSTableViewDelegate.swift */,
+				A55DF62A2161608800EA9E46 /* SettingsWindowController+CollectionTableViewDelegate.swift */,
+			);
+			path = SettingsWindowController;
+			sourceTree = "<group>";
+		};
 		A57AC50B21125E67007C0EE1 /* Collections */ = {
 			isa = PBXGroup;
 			children = (
@@ -298,7 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				A5A65C6120FBFECB00BBB6A8 /* HandyMenuFramework.h */,
-				A5AA666F20FFD1A10027BC45 /* SettingsWindowController.swift */,
+				A55DF62D216160C400EA9E46 /* SettingsWindowController */,
 				A5A65C6C20FBFF4100BBB6A8 /* PluginController.swift */,
 				A521562620FD3A0B002A5816 /* MenuController.swift */,
 				A5A65C7020FBFF7900BBB6A8 /* DataController.swift */,
@@ -415,16 +438,21 @@
 				A5A65C7320FBFF7900BBB6A8 /* DataController.swift in Sources */,
 				A5398D1B21165A8600BD70EF /* NSImage.swift in Sources */,
 				A52D36E821138F8000FD2874 /* InstalledPluginsCollectionView.swift in Sources */,
+				A55DF6312161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift in Sources */,
 				A5380534210A6DBF0026E4A5 /* CommandCollectionViewItem.swift in Sources */,
 				A5A65C7120FBFF7900BBB6A8 /* PluginData.swift in Sources */,
+				A55DF6332161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift in Sources */,
+				A55DF62B2161608800EA9E46 /* SettingsWindowController+CollectionTableViewDelegate.swift in Sources */,
 				A5AA667120FFD1A10027BC45 /* SettingsWindowController.swift in Sources */,
 				A52D36EA2113900A00FD2874 /* CollectionTableView.swift in Sources */,
+				A55DF62921615EB900EA9E46 /* SettingsWindowController+NSTableViewDelegate.swift in Sources */,
 				A58FC0DD20FF83B1004730BB /* Command.swift in Sources */,
 				A5A65C9120FCD97B00BBB6A8 /* Shortcut.swift in Sources */,
 				A5A136BA2115E9700042B594 /* InputPanel.swift in Sources */,
 				A5A65C8D20FCD94700BBB6A8 /* Collection.swift in Sources */,
 				A54EA40D211910D500C56E01 /* NSNib.swift in Sources */,
 				A52D36F321149F9A00FD2874 /* SearchField.swift in Sources */,
+				A55DF62F2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift in Sources */,
 				A508BF0A210F96F100024995 /* Utils.swift in Sources */,
 				A52D36F82114A98000FD2874 /* SearchFieldTextFieldCell.swift in Sources */,
 				A5905865210E0AF700B6079A /* OSLog.swift in Sources */,

@@ -13,8 +13,7 @@ public protocol SettingsWindowControllerDelegate: class {
 
 public class SettingsWindowController: NSWindowController, SettingsWindowViewControllerDelegate {
     
-    // MARK: - Outlets
-    @IBOutlet private weak var searchField: SearchField!
+    // MARK: - Private Outlets
     @IBOutlet private weak var versionLabel: NSTextField!
     @IBOutlet private weak var noPluginsLabel: NSTextField! {
         didSet {
@@ -26,17 +25,20 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
             self.emptyListLabel.alphaValue = 0.0
         }
     }
-    @IBOutlet private weak var installedPluginsCollectionView: NSCollectionView!
     @IBOutlet private weak var collectionsPopUpButton: NSPopUpButton!
     @IBOutlet private weak var collectionSettingsMenu: NSMenu!
     @IBOutlet private weak var removeMenuItem: NSMenuItem!
     @IBOutlet private weak var shortcutField: ShortcutField!
-    @IBOutlet private weak var deleteItemButton: NSButton!
     @IBOutlet private weak var insertSeparatorButton: NSButton!
     @IBOutlet private weak var autoGroupingCheckboxButton: NSButton!
     @IBOutlet private weak var collectionsScrollView: NSScrollView!
     @IBOutlet private weak var renamingPanel: InputPanel!
-    @IBOutlet private weak var currentCollectionTableView: NSTableView! {
+    
+    // MARK: - Public Outlets
+    @IBOutlet public weak var searchField: SearchField!
+    @IBOutlet public weak var installedPluginsCollectionView: NSCollectionView!
+    @IBOutlet public weak var deleteItemButton: NSButton!
+    @IBOutlet public weak var currentCollectionTableView: NSTableView! {
         didSet {
             // Fixing the first column width
             self.currentCollectionTableView.sizeToFit()
@@ -46,16 +48,16 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
     // MARK: - Private Properties
     private let windowViewController = SettingsWindowViewController()
     
-    private var currentCollectionIndex: Int = 0
-    private var collections: [Collection] = []
+    public var currentCollectionIndex: Int = 0
+    public var collections: [Collection] = []
     
-    private var filteredPlugins: [InstalledPluginData] = [] {
+    public var filteredPlugins: [InstalledPluginData] = [] {
         didSet {
             self.toggleNoPluginsLabel()
         }
     }
     
-    private var currentCollection: Collection {
+    public var currentCollection: Collection {
         get {
             return self.collections[self.currentCollectionIndex]
         }
@@ -65,11 +67,11 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         }
     }
     
-    private let commandHeight:CGFloat = 24.0
-    private let headerHeight:CGFloat = 48.0
-    private let footerHeight: CGFloat = 32.0
+    public let commandHeight:CGFloat = 24.0
+    public let headerHeight:CGFloat = 48.0
+    public let footerHeight: CGFloat = 32.0
     
-    private var collectionTableViewRect: NSRect {
+    public var collectionTableViewRect: NSRect {
         return NSInsetRect(self.currentCollectionTableView.convert(self.collectionsScrollView.bounds, to: nil), -10, -20)
     }
     
@@ -201,11 +203,11 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         return newTitle
     }
     
-    private func pluginCommandAtIndexPath(_ indexPath: IndexPath) -> Command {
+    public func pluginCommandAtIndexPath(_ indexPath: IndexPath) -> Command {
         return self.filteredPlugins[indexPath.section].commands[indexPath.item]
     }
     
-    private func removeCommand(at row: IndexSet.Element) {
+    public func removeCommand(at row: IndexSet.Element) {
         self.currentCollection.items.remove(at: row)
         self.currentCollectionTableView.removeRows(at: [row], withAnimation: .effectFade)
         self.installedPluginsCollectionView.reloadData()
@@ -231,224 +233,12 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
     }
 }
 
-// MARK: - NSTableViewDataSource
-extension SettingsWindowController: NSTableViewDataSource {
-    public func numberOfRows(in tableView: NSTableView) -> Int {
-        return self.collections[currentCollectionIndex].items.count
-    }
-}
-
-// MARK: - NSTableViewDelegate, CollectionTableViewDelegate {
-extension SettingsWindowController: NSTableViewDelegate, CollectionTableViewDelegate {
-    
-    // Setting Height For Item
-    public func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        return self.commandHeight
-    }
-    
-    // Cofiguring Item's View
-    public func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let item = collections[currentCollectionIndex].items[row]
-        switch item {
-        case .command(let commandData):
-            guard let commandCell = currentCollectionTableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CommandCell"), owner: self) as? CommandTableViewItem else { return nil }
-            commandCell.title = commandData.name
-            commandCell.toolTip = commandData.pluginName
-            return commandCell
-        case .separator:
-            guard let separatorCell = currentCollectionTableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SeparatorCell"), owner: self) else { return nil }
-            return separatorCell
-        }
-    }
-    
-    // Handling Selection
-    public func tableViewSelectionDidChange(_ notification: Notification) {
-        self.deleteItemButton.isEnabled = self.currentCollectionTableView.selectedRowIndexes.count != 0
-    }
-    
-    // Drag And Drop
-    public func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
-        return NSDragOperation.link
-    }
-    
-    // Writing moving item index into pasteboard at the begining of the drag
-    public func tableView(_ tableView: NSTableView, writeRowsWith rowIndexes: IndexSet, to pboard: NSPasteboard) -> Bool {
-        self.currentCollectionTableView.selectRowIndexes(rowIndexes, byExtendingSelection: false)
-        let data = NSKeyedArchiver.archivedData(withRootObject: rowIndexes)
-        pboard.declareTypes([.string], owner: self)
-        pboard.setData(data, forType: .string)
-        return true
-    }
-    
-    // Handling Drop
-    private func insertNewCommand(from indexPath: IndexPath, to row: Int) {
-        let pluginCommandData = self.pluginCommandAtIndexPath(indexPath)
-        let newCommand = CollectionItem.command(pluginCommandData)
-        self.currentCollection.items.insert(newCommand, at: row)
-        self.currentCollectionTableView.insertRows(at: IndexSet(integer: row), withAnimation: .effectFade)
-        self.installedPluginsCollectionView.reloadItems(at: [indexPath])
-    }
-    
-    public func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
-        guard let data = info.draggingPasteboard().data(forType: .string) else { return false }
-        
-        if self.installedPluginsCollectionView.isEqual(info.draggingSource())  {
-            guard let sourceIndexPath = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexPath else { return false }
-            self.insertNewCommand(from: sourceIndexPath, to: row)
-            return true
-        } else if self.currentCollectionTableView.isEqual(info.draggingSource()) {
-            guard let indexes = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexSet,
-                let fromRow = indexes.first else { return false }
-            let toRow = (fromRow > row) ? row : row - 1
-            let movingItem = self.currentCollection.items.remove(at: fromRow)
-            self.currentCollection.items.insert(movingItem, at: toRow)
-            self.currentCollectionTableView.moveRow(at: fromRow, to: toRow)
-            self.currentCollectionTableView.deselectAll(nil)
-            return true
-        }
-        
-        return false
-    }
-    
-    // Preventing animation after deleting
-    public func tableView(_ tableView: NSTableView, draggingSession session: NSDraggingSession, willBeginAt screenPoint: NSPoint, forRowIndexes rowIndexes: IndexSet) {
-        session.animatesToStartingPositionsOnCancelOrFail = false
-    }
-    
-    // Deleting item if drop was outside tableView
-    public func tableView(_ tableView: NSTableView, draggingSession session: NSDraggingSession, endedAt screenPoint: NSPoint, operation: NSDragOperation) {
-        if  let tableViewRect = self.window?.convertToScreen(self.collectionTableViewRect),
-            !tableViewRect.contains(screenPoint),
-            let data = session.draggingPasteboard.data(forType: .string),
-            let indexes = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexSet,
-            let rowToDelete = indexes.first {
-            self.removeCommand(at: rowToDelete)
-        }
-    }
-    
-    // Changing cursor when dragging out of tableView
-    func collectionTableView(_ collectionTableView: CollectionTableView, draggingSession session: NSDraggingSession, movedTo screenPoint: NSPoint) {
-        if  let tableViewRect = self.window?.convertToScreen(self.collectionTableViewRect),
-            !tableViewRect.contains(screenPoint) {
-            NSCursor.disappearingItem.set()
-        } else {
-            NSCursor.arrow.set()
-        }
-    }
-    
-    
-    // Deleting item if DEL key is pressed (CollectionTableViewDelegate)
-    func deleteIsPressed(at rows: IndexSet) {
-        guard let index = rows.first else { return }
-        self.removeCommand(at: index)
-    }
-    
-}
-
-// MARK: - NSCollectionViewDataSource
-extension SettingsWindowController: NSCollectionViewDataSource {
-    
-    // Common DataSource Methods
-    public func numberOfSections(in collectionView: NSCollectionView) -> Int {
-        return self.filteredPlugins.count
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.filteredPlugins[section].commands.count
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        guard let collectionViewItem = self.installedPluginsCollectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CommandCollectionViewItem"), for: indexPath) as? CommandCollectionViewItem else { return NSCollectionViewItem()}
-        let commandData = self.pluginCommandAtIndexPath(indexPath)
-        collectionViewItem.configure(commandData.name, isUsed: self.currentCollection.items.contains(.command(commandData)))
-        collectionViewItem.searchingString = self.searchField.stringValue
-        collectionViewItem.delegate = self
-        return collectionViewItem
-    }
-    
-    // Configuring Views For Headers And Footers
-    public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-        
-        switch kind {
-        case .sectionHeader:
-            let suppementaryHeaderView = self.installedPluginsCollectionView.makeSupplementaryView(ofKind: .sectionHeader,
-                                                                                                   withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionHeaderView"),
-                                                                                                   for: indexPath) as! PluginSectionHeaderView
-            suppementaryHeaderView.title = self.filteredPlugins[indexPath.section].pluginName
-            suppementaryHeaderView.image = self.filteredPlugins[indexPath.section].image ?? NSImage.pluginIconPlaceholderImage
-            suppementaryHeaderView.searchingString = self.searchField.stringValue
-            return suppementaryHeaderView
-        case .sectionFooter:
-            return self.installedPluginsCollectionView.makeSupplementaryView(ofKind: .sectionFooter,
-                                                                             withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionFooterView"),
-                                                                             for: indexPath)
-        default:
-            return NSView()
-        }
-    }
-}
-
-// MARK: - NSCollectionViewDelegate, CommandCollectionViewItemDelegate
-extension SettingsWindowController: NSCollectionViewDelegateFlowLayout, CommandCollectionViewItemDelegate {
-    
-    // Configuring Items, Headers and Footers sizes
-    public func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
-        return NSSize(width: collectionView.bounds.width, height: self.commandHeight)
-    }
-    public func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> NSSize {
-        return NSSize(width: collectionView.bounds.width, height: self.headerHeight)
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, referenceSizeForFooterInSection section: Int) -> NSSize {
-        return NSSize(width: collectionView.bounds.width, height: self.footerHeight)
-    }
-    
-    // Enable Dragging
-    public func collectionView(_ collectionView: NSCollectionView, canDragItemsAt indexes: IndexSet, with event: NSEvent) -> Bool {
-        return true
-    }
-    
-    // Selections And Deselection
-    public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        guard let indexPath = indexPaths.first,
-            let item = self.installedPluginsCollectionView.item(at: indexPath) as? CommandCollectionViewItem,
-            !item.isUsed else { return [] }
-        return indexPaths
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        guard let indexPath = indexPaths.first,
-            let item = collectionView.item(at: indexPath) as? CommandCollectionViewItem else { return }
-        item.setHighlight(true)
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        guard let indexPath = indexPaths.first,
-            let item = collectionView.item(at: indexPath) as? CommandCollectionViewItem else { return }
-        item.setHighlight(false)
-    }
-    
+// MARK: - CommandCollectionViewItemDelegate
+extension SettingsWindowController: CommandCollectionViewItemDelegate {
     //Handling double click (CommandCollectionViewItemDelegate)
     func doubleClick(on item: CommandCollectionViewItem) {
         guard let sourceIndexPath = self.installedPluginsCollectionView.indexPath(for: item) else { return }
         self.insertNewCommand(from: sourceIndexPath, to: self.currentCollection.items.endIndex)
-    }
-    
-    // Drag & Drop
-    // Writing dragging item's indexPath to pasteboard
-    public func collectionView(_ collectionView: NSCollectionView, writeItemsAt indexPaths: Set<IndexPath>, to pasteboard: NSPasteboard) -> Bool {
-        guard let indexPath = indexPaths.first,
-            let item = self.installedPluginsCollectionView.item(at: indexPath) as? CommandCollectionViewItem,
-            !item.isUsed else { return false }
-        let data = NSKeyedArchiver.archivedData(withRootObject: indexPath)
-        pasteboard.declareTypes([.string], owner: self)
-        pasteboard.setData(data, forType: .string)
-        return true
-    }
-    
-    // Preventing animation when cancel dragging
-    public func collectionView(_ collectionView: NSCollectionView, draggingSession session: NSDraggingSession, willBeginAt screenPoint: NSPoint, forItemsAt indexes: IndexSet) {
-        session.animatesToStartingPositionsOnCancelOrFail = false
     }
 }
 
@@ -461,7 +251,7 @@ extension SettingsWindowController: ShortcutFieldDelegate {
 
 // MARK: - SearchField Delegate {
 extension SettingsWindowController: SearchFieldDelegate {
-    func searchField(_ searchField: SearchField, didChanged value: String) {
+    public func searchField(_ searchField: SearchField, didChanged value: String) {
         self.filterInstalledPlugins(by: value)
     }
 }
