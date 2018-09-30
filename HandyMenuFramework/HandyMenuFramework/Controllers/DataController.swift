@@ -15,8 +15,9 @@ public class DataController {
     
     // MARK: - Private Properties
     private var pluginData: PluginData?
-    private var installedPlugins: [InstalledPluginData] = []
-    private var dataCaretaker = DataCaretaker()
+    private var installedPlugins: [InstalledPluginData]
+    private var sketchCommands: [String]
+    private var dataCaretaker:DataCaretaker
     
     // MARK: - Public Properties
     public var usedShortcuts: Set<Int> {
@@ -28,8 +29,21 @@ public class DataController {
     
     // MARK: - Public Properties
     public weak var delegate: DataControllerDelegate?
+    
+    // MARK: - Lifecycle
+    public init() {
+        self.installedPlugins = []
+        self.sketchCommands = []
+        self.dataCaretaker = DataCaretaker()
+    }
 
     // MARK: - Instance Methods
+    public func load() {
+        self.loadPluginData()
+        self.loadInstalledPlugins()
+        self.loadSketchCommands()
+    }
+    
     private func loadData(for retrievingResult: DataCaretaker.RetrievingResult) -> PluginData {
         switch retrievingResult {
         case .v5(let pluginData):
@@ -49,13 +63,6 @@ public class DataController {
         case .empty:
             return PluginData.empty
         }
-    }
-    
-    public func loadPluginData(){
-        self.pluginData = self.loadData(for: dataCaretaker.retrieve())
-        self.pluginData?.pluginVersion = PluginData.currentVersion
-        self.filterCollections()
-        delegate?.dataController(self, didUpdate: pluginData!)
     }
     
     private func filterCollections() {
@@ -84,7 +91,14 @@ public class DataController {
         self.delegate?.dataController(self, didUpdate: pluginData)
     }
     
-    public func loadInstalledPluginsData() {
+    private func loadPluginData(){
+        self.pluginData = self.loadData(for: dataCaretaker.retrieve())
+        self.pluginData?.pluginVersion = PluginData.currentVersion
+        self.filterCollections()
+        delegate?.dataController(self, didUpdate: pluginData!)
+    }
+    
+    private func loadInstalledPlugins() {
         guard let installedPlugins = SketchAppBridge.sharedInstance().installedPlugins as? [String: NSObject] else { return }
         var installedPluginsData:[InstalledPluginData] = []
         
@@ -112,5 +126,9 @@ public class DataController {
         self.installedPlugins = installedPluginsData
         installedPluginsData.sort { $0.pluginName < $1.pluginName }
         self.delegate?.dataController(self, didLoad: installedPluginsData)
+    }
+    
+    private func loadSketchCommands() {
+        
     }
 }

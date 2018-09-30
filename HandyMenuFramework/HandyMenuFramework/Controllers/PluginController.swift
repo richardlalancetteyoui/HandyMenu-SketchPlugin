@@ -22,15 +22,13 @@
         self.dataController = DataController()
         self.menuController = MenuController()
         self.shortcutController = ShortcutController()
-        super.init()
     }
     
     @objc public func configure() {
         self.settingsWindowController.delegate = self
         self.shortcutController.delegate = self
         self.dataController.delegate = self
-        self.dataController.loadInstalledPluginsData()
-        self.dataController.loadPluginData()
+        self.dataController.load()
     }
     
     @objc public func showSettings() {

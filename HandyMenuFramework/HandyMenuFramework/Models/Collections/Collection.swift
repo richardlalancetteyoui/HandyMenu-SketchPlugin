@@ -6,7 +6,7 @@
 //  Copyright © 2018 Sergey Dmitriev. All rights reserved.
 //
 
-public struct Collection:Codable {
+public struct Collection: Codable {
     public var title: String
     public var shortcut: Shortcut
     public var items:[CollectionItem]

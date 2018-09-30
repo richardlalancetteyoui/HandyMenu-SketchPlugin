@@ -6,7 +6,7 @@
 //  Copyright © 2018 Sergey Dmitriev. All rights reserved.
 //
 
-public struct Command:Codable, Equatable {
+public struct Command: Codable, Equatable {
     public var name:String
     public var commandID:String
     public var pluginName: String
