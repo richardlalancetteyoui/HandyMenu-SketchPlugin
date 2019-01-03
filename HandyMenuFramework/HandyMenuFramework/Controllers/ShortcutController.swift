@@ -48,11 +48,9 @@ public class ShortcutController {
     
     public func start() {
         self.isEnabled = true
-        plugin_log("Shortcut controller is ON")
     }
     
     public func stop() {
         self.isEnabled = false
-        plugin_log("Shortcut controller is OFF")
     }
 }

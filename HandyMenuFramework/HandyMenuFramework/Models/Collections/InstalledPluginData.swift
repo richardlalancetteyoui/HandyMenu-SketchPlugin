@@ -9,5 +9,5 @@
 public struct InstalledPluginData: Equatable {
     public var pluginName: String
     public var image: NSImage?
-    public var commands: [Command]
+    public var commands: [PluginCommand]
 }

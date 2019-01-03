@@ -1,5 +1,5 @@
 //
-//  MenuElement.swift
+//  CollectionItem.swift
 //  HandyMenuFramework
 //
 //  Created by Sergey Dmitriev on 16/07/2018.
@@ -7,7 +7,8 @@
 //
 
 public enum CollectionItem: Equatable {
-    case command(Command)
+    case command(PluginCommand)
+    case sketchCommand(SketchCommand)
     case separator
     
     private enum CodingKeys:String, CodingKey {
@@ -23,6 +24,9 @@ extension CollectionItem: Encodable {
         case .command(let value):
             try container.encode("command", forKey: .type)
             try container.encode(value, forKey: .data)
+        case .sketchCommand(let value):
+            try container.encode("sketchCommand", forKey: .type)
+            try container.encode(value, forKey: .data)
         case .separator:
             try container.encode("separator", forKey: .type)
         }
@@ -33,11 +37,13 @@ extension CollectionItem: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(String.self, forKey: .type)
-        
         switch type {
         case "command":
-            let data = try container.decode(Command.self, forKey: .data)
+            let data = try container.decode(PluginCommand.self, forKey: .data)
             self = .command(data)
+        case "sketchCommand":
+            let data = try container.decode(SketchCommand.self, forKey: .data)
+            self = .sketchCommand(data)
         default:
             self = .separator
         }

@@ -28,6 +28,9 @@ class HandyMenu: NSMenu {
                     newMenuItem.target = self
                     newMenuItem.representedObject = commandData
                     self.addItem(newMenuItem)
+                case .sketchCommand(let sketchCommand):
+                    // TODO
+                    break
                 }
             }
         }else {
@@ -49,7 +52,7 @@ class HandyMenu: NSMenu {
         
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = .byTruncatingTail
-        let titleLabelAttributes: [NSAttributedStringKey:Any] = [.font : NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .bold),
+        let titleLabelAttributes: [NSAttributedString.Key:Any] = [.font : NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .bold),
                                                                  .foregroundColor : NSColor.tertiaryLabelColor,
                                                                  .paragraphStyle: paragraph ]
         
@@ -92,7 +95,7 @@ class HandyMenu: NSMenu {
     }
     
     @objc private func runPluginCommand(sender: NSMenuItem) {
-        guard let itemData = sender.representedObject as? Command else { return }
+        guard let itemData = sender.representedObject as? PluginCommand else { return }
         SketchAppBridge.sharedInstance().runSketchPluginCommand(itemData.commandID, from: itemData.pluginID)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  MenuGroup.swift
+//  Collection.swift
 //  HandyMenuFramework
 //
 //  Created by Sergey Dmitriev on 16/07/2018.

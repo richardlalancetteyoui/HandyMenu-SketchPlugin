@@ -26,6 +26,9 @@ extension SettingsWindowController: NSTableViewDelegate {
         case .separator:
             guard let separatorCell = currentCollectionTableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SeparatorCell"), owner: self) else { return nil }
             return separatorCell
+        case .sketchCommand(let sketchCommand):
+            // TODO
+            return nil
         }
     }
     
@@ -58,13 +61,13 @@ extension SettingsWindowController: NSTableViewDelegate {
     }
     
     public func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
-        guard let data = info.draggingPasteboard().data(forType: .string) else { return false }
+        guard let data = info.draggingPasteboard.data(forType: .string) else { return false }
         
-        if self.installedPluginsCollectionView.isEqual(info.draggingSource())  {
+        if self.installedPluginsCollectionView.isEqual(info.draggingSource)  {
             guard let sourceIndexPath = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexPath else { return false }
             self.insertNewCommand(from: sourceIndexPath, to: row)
             return true
-        } else if self.currentCollectionTableView.isEqual(info.draggingSource()) {
+        } else if self.currentCollectionTableView.isEqual(info.draggingSource) {
             guard let indexes = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexSet,
                 let fromRow = indexes.first else { return false }
             let toRow = (fromRow > row) ? row : row - 1

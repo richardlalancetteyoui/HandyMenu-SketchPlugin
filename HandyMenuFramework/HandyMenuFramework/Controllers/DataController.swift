@@ -55,7 +55,7 @@ public class DataController {
                 guard let installedPlugins = SketchAppBridge.sharedInstance().installedPlugins as? [String:NSObject],
                     let pluginBundle = installedPlugins[scheme.pluginID],
                     let pluginName = pluginBundle.value(forKey: "name") as? String else { continue }
-                let newItemData = Command(name: scheme.name, commandID: scheme.commandID, pluginName: pluginName, pluginID: scheme.pluginID)
+                let newItemData = PluginCommand(name: scheme.name, commandID: scheme.commandID, pluginName: pluginName, pluginID: scheme.pluginID)
                 newItems.append(.command(newItemData))
             }
             newData.collections = [Collection(title: "Main Collection", shortcut: .legacyShortcut, items: newItems, autoGrouping: true)]
@@ -77,6 +77,9 @@ public class DataController {
                     return true
                 case .command(let commandData):
                     return SketchAppBridge.sharedInstance().isExists(commandData.pluginID, with: commandData.commandID)
+                case .sketchCommand(let sketchCommand):
+                    // TODO
+                    return true
                 }
             })
             filteredCollections.append(newCollection)
@@ -117,7 +120,7 @@ public class DataController {
                     let commandName = commandBundle.value(forKey: "name") as? String,
                     let commandID = commandBundle.value(forKey: "identifier") as? String {
                     
-                    let installedPluginCommand = Command(name: commandName, commandID: commandID, pluginName: pluginName, pluginID: pluginKey)
+                    let installedPluginCommand = PluginCommand(name: commandName, commandID: commandID, pluginName: pluginName, pluginID: pluginKey)
                     installedPluginData.commands.append(installedPluginCommand)
                 }
             }
@@ -129,6 +132,8 @@ public class DataController {
     }
     
     private func loadSketchCommands() {
-        
+        guard let mainMenu = NSApplication.shared.mainMenu else { return }
+        let menuItems = mainMenu.items.compactMap(){$0.title}
+        plugin_log("%@", String(describing: menuItems))
     }
 }

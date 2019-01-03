@@ -11,7 +11,7 @@ public struct PluginData: Codable {
     public var pluginVersion:Double
     public var collections: [Collection]
     
-    static public var currentVersion: Double = 5.1
+    static public var currentVersion: Double = 6.0
 }
 
 extension PluginData {

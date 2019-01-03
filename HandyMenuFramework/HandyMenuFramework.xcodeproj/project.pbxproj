@@ -34,7 +34,7 @@
 		A55DF62F2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF62E2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift */; };
 		A55DF6312161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF6302161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift */; };
 		A55DF6332161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55DF6322161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift */; };
-		A58FC0DD20FF83B1004730BB /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58FC0DC20FF83B1004730BB /* Command.swift */; };
+		A58FC0DD20FF83B1004730BB /* PluginCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58FC0DC20FF83B1004730BB /* PluginCommand.swift */; };
 		A58FC0E120FF87F2004730BB /* HMCommandScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = A58FC0DF20FF87F2004730BB /* HMCommandScheme.m */; };
 		A58FC0E220FF87F2004730BB /* HMCommandScheme.h in Headers */ = {isa = PBXBuildFile; fileRef = A58FC0E020FF87F2004730BB /* HMCommandScheme.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A5905865210E0AF700B6079A /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5905864210E0AF700B6079A /* OSLog.swift */; };
@@ -44,7 +44,7 @@
 		A5A65C7120FBFF7900BBB6A8 /* PluginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A65C6E20FBFF7900BBB6A8 /* PluginData.swift */; };
 		A5A65C7220FBFF7900BBB6A8 /* DataCaretaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A65C6F20FBFF7900BBB6A8 /* DataCaretaker.swift */; };
 		A5A65C7320FBFF7900BBB6A8 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A65C7020FBFF7900BBB6A8 /* DataController.swift */; };
-		A5A65C7520FC00C800BBB6A8 /* HandyMenuFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5A65C5E20FBFECB00BBB6A8 /* HandyMenuFramework.framework */; };
+		A5A65C7520FC00C800BBB6A8 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon, Release) */ = {isa = PBXBuildFile; fileRef = A5A65C5E20FBFECB00BBB6A8 /* HandyMenuFramework.framework */; };
 		A5A65C8D20FCD94700BBB6A8 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A65C8C20FCD94700BBB6A8 /* Collection.swift */; };
 		A5A65C8F20FCD95100BBB6A8 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A65C8E20FCD95100BBB6A8 /* CollectionItem.swift */; };
 		A5A65C9120FCD97B00BBB6A8 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A65C9020FCD97B00BBB6A8 /* Shortcut.swift */; };
@@ -52,17 +52,63 @@
 		A5AA666E20FFB10B0027BC45 /* SketchAppBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A5AA666C20FFB10B0027BC45 /* SketchAppBridge.m */; };
 		A5AA667120FFD1A10027BC45 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AA666F20FFD1A10027BC45 /* SettingsWindowController.swift */; };
 		A5AA667220FFD1A10027BC45 /* SettingsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5AA667020FFD1A10027BC45 /* SettingsWindowController.xib */; };
+		A5D0566D21616A5800B6CD4B /* SketchCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D0566C21616A5800B6CD4B /* SketchCommand.swift */; };
+		A5E23F4E21DE9D790072D2E4 /* icon.png in Copy Files to the Plugin's bundle (Framework + Icon, Release) */ = {isa = PBXBuildFile; fileRef = A5E23F4C21DE9D710072D2E4 /* icon.png */; };
+		A5E23F5621DE9F790072D2E4 /* manifest.json in Copy Files to the Plugin's bundle (Manifest + Script, Release) */ = {isa = PBXBuildFile; fileRef = A5E23F4821DE9D530072D2E4 /* manifest.json */; };
+		A5E23F5721DE9F790072D2E4 /* script.js in Copy Files to the Plugin's bundle (Manifest + Script, Release) */ = {isa = PBXBuildFile; fileRef = A5E23F4921DE9D530072D2E4 /* script.js */; };
+		A5E23F5921DEA0E70072D2E4 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon, Debug) */ = {isa = PBXBuildFile; fileRef = A5A65C5E20FBFECB00BBB6A8 /* HandyMenuFramework.framework */; };
+		A5E23F5A21DEA0ED0072D2E4 /* icon.png in Copy Files to the Plugin's bundle (Framework + Icon, Debug) */ = {isa = PBXBuildFile; fileRef = A5E23F4C21DE9D710072D2E4 /* icon.png */; };
+		A5E23F5C21DEA1070072D2E4 /* manifest.json in Copy Files to the Plugin's bundle (Manifest + Script, Debug) */ = {isa = PBXBuildFile; fileRef = A5E23F4821DE9D530072D2E4 /* manifest.json */; };
+		A5E23F5D21DEA1070072D2E4 /* script.js in Copy Files to the Plugin's bundle (Manifest + Script, Debug) */ = {isa = PBXBuildFile; fileRef = A5E23F4921DE9D530072D2E4 /* script.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A5A65C7420FC00BC00BBB6A8 /* CopyFiles */ = {
+		A5A65C7420FC00BC00BBB6A8 /* Copy Files to the Plugin's bundle (Framework + Icon, Release) */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "/Users/Sergey/Dev/HandyMenu-SketchPlugin/HandyMenu.sketchplugin/Contents/Resources";
+			buildActionMask = 8;
+			dstPath = /HandyMenu.sketchplugin/Contents/Resources;
 			dstSubfolderSpec = 0;
 			files = (
-				A5A65C7520FC00C800BBB6A8 /* HandyMenuFramework.framework in CopyFiles */,
+				A5E23F4E21DE9D790072D2E4 /* icon.png in Copy Files to the Plugin's bundle (Framework + Icon, Release) */,
+				A5A65C7520FC00C800BBB6A8 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon, Release) */,
 			);
+			name = "Copy Files to the Plugin's bundle (Framework + Icon, Release)";
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A5E23F5521DE9F6B0072D2E4 /* Copy Files to the Plugin's bundle (Manifest + Script, Release) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /HandyMenu.sketchplugin/Sketch;
+			dstSubfolderSpec = 0;
+			files = (
+				A5E23F5621DE9F790072D2E4 /* manifest.json in Copy Files to the Plugin's bundle (Manifest + Script, Release) */,
+				A5E23F5721DE9F790072D2E4 /* script.js in Copy Files to the Plugin's bundle (Manifest + Script, Release) */,
+			);
+			name = "Copy Files to the Plugin's bundle (Manifest + Script, Release)";
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A5E23F5821DEA0C80072D2E4 /* Copy Files to the Plugin's bundle (Framework + Icon, Debug) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = HandyMenu.sketchplugin/Contents/Resources;
+			dstSubfolderSpec = 16;
+			files = (
+				A5E23F5A21DEA0ED0072D2E4 /* icon.png in Copy Files to the Plugin's bundle (Framework + Icon, Debug) */,
+				A5E23F5921DEA0E70072D2E4 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon, Debug) */,
+			);
+			name = "Copy Files to the Plugin's bundle (Framework + Icon, Debug)";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5E23F5B21DEA0F40072D2E4 /* Copy Files to the Plugin's bundle (Manifest + Script, Debug) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = HandyMenu.sketchplugin/Sketch;
+			dstSubfolderSpec = 16;
+			files = (
+				A5E23F5C21DEA1070072D2E4 /* manifest.json in Copy Files to the Plugin's bundle (Manifest + Script, Debug) */,
+				A5E23F5D21DEA1070072D2E4 /* script.js in Copy Files to the Plugin's bundle (Manifest + Script, Debug) */,
+			);
+			name = "Copy Files to the Plugin's bundle (Manifest + Script, Debug)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -95,7 +141,7 @@
 		A55DF62E2161612400EA9E46 /* SettingsWindowController+NSTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSTableViewDataSource.swift"; sourceTree = "<group>"; };
 		A55DF6302161615F00EA9E46 /* SettingsWindowController+NSCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSCollectionViewDataSource.swift"; sourceTree = "<group>"; };
 		A55DF6322161622000EA9E46 /* SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsWindowController+NSCollectionViewDelegateFlowLayout.swift"; sourceTree = "<group>"; };
-		A58FC0DC20FF83B1004730BB /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		A58FC0DC20FF83B1004730BB /* PluginCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginCommand.swift; sourceTree = "<group>"; };
 		A58FC0DF20FF87F2004730BB /* HMCommandScheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMCommandScheme.m; sourceTree = "<group>"; };
 		A58FC0E020FF87F2004730BB /* HMCommandScheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMCommandScheme.h; sourceTree = "<group>"; };
 		A5905864210E0AF700B6079A /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
@@ -114,6 +160,10 @@
 		A5AA666C20FFB10B0027BC45 /* SketchAppBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SketchAppBridge.m; sourceTree = "<group>"; };
 		A5AA666F20FFD1A10027BC45 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		A5AA667020FFD1A10027BC45 /* SettingsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsWindowController.xib; sourceTree = "<group>"; };
+		A5D0566C21616A5800B6CD4B /* SketchCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SketchCommand.swift; sourceTree = "<group>"; };
+		A5E23F4821DE9D530072D2E4 /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = manifest.json; path = ../../../../HandyMenu.sketchplugin/Contents/Sketch/manifest.json; sourceTree = "<group>"; };
+		A5E23F4921DE9D530072D2E4 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = script.js; path = ../../../../HandyMenu.sketchplugin/Contents/Sketch/script.js; sourceTree = "<group>"; };
+		A5E23F4C21DE9D710072D2E4 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../../../HandyMenu.sketchplugin/Contents/Resources/icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +208,8 @@
 		A538052E210A49B20026E4A5 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A5E23F4721DE9D480072D2E4 /* Sketch */,
+				A5E23F4C21DE9D710072D2E4 /* icon.png */,
 				A538052F210A49C60026E4A5 /* assets.xcassets */,
 			);
 			path = Assets;
@@ -244,7 +296,8 @@
 				A5380536210A75CA0026E4A5 /* InstalledPluginData.swift */,
 				A5A65C8C20FCD94700BBB6A8 /* Collection.swift */,
 				A5A65C8E20FCD95100BBB6A8 /* CollectionItem.swift */,
-				A58FC0DC20FF83B1004730BB /* Command.swift */,
+				A58FC0DC20FF83B1004730BB /* PluginCommand.swift */,
+				A5D0566C21616A5800B6CD4B /* SketchCommand.swift */,
 			);
 			path = Collections;
 			sourceTree = "<group>";
@@ -339,6 +392,15 @@
 			path = Bridges;
 			sourceTree = "<group>";
 		};
+		A5E23F4721DE9D480072D2E4 /* Sketch */ = {
+			isa = PBXGroup;
+			children = (
+				A5E23F4821DE9D530072D2E4 /* manifest.json */,
+				A5E23F4921DE9D530072D2E4 /* script.js */,
+			);
+			path = Sketch;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -363,7 +425,10 @@
 				A5A65C5A20FBFECB00BBB6A8 /* Frameworks */,
 				A5A65C5B20FBFECB00BBB6A8 /* Headers */,
 				A5A65C5C20FBFECB00BBB6A8 /* Resources */,
-				A5A65C7420FC00BC00BBB6A8 /* CopyFiles */,
+				A5E23F5821DEA0C80072D2E4 /* Copy Files to the Plugin's bundle (Framework + Icon, Debug) */,
+				A5A65C7420FC00BC00BBB6A8 /* Copy Files to the Plugin's bundle (Framework + Icon, Release) */,
+				A5E23F5B21DEA0F40072D2E4 /* Copy Files to the Plugin's bundle (Manifest + Script, Debug) */,
+				A5E23F5521DE9F6B0072D2E4 /* Copy Files to the Plugin's bundle (Manifest + Script, Release) */,
 			);
 			buildRules = (
 			);
@@ -446,7 +511,7 @@
 				A5AA667120FFD1A10027BC45 /* SettingsWindowController.swift in Sources */,
 				A52D36EA2113900A00FD2874 /* CollectionTableView.swift in Sources */,
 				A55DF62921615EB900EA9E46 /* SettingsWindowController+NSTableViewDelegate.swift in Sources */,
-				A58FC0DD20FF83B1004730BB /* Command.swift in Sources */,
+				A58FC0DD20FF83B1004730BB /* PluginCommand.swift in Sources */,
 				A5A65C9120FCD97B00BBB6A8 /* Shortcut.swift in Sources */,
 				A5A136BA2115E9700042B594 /* InputPanel.swift in Sources */,
 				A5A65C8D20FCD94700BBB6A8 /* Collection.swift in Sources */,
@@ -459,6 +524,7 @@
 				A5380539210B9A240026E4A5 /* PluginSectionHeaderView.swift in Sources */,
 				A5380537210A75CA0026E4A5 /* InstalledPluginData.swift in Sources */,
 				A508BF05210F579E00024995 /* ShortcutField.swift in Sources */,
+				A5D0566D21616A5800B6CD4B /* SketchCommand.swift in Sources */,
 				A5A65C7220FBFF7900BBB6A8 /* DataCaretaker.swift in Sources */,
 				A52A317E20FEB6A900E64617 /* ShortcutController.swift in Sources */,
 				A538053F210BB3AB0026E4A5 /* SettingsWindowViewController.swift in Sources */,
@@ -613,7 +679,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -642,7 +708,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergeishere.HandyMenuFramework;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

@@ -29,18 +29,17 @@ extension SettingsWindowController: NSCollectionViewDataSource {
     
     // Configuring Views For Headers And Footers
     public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-        
         switch kind {
-        case .sectionHeader:
-            let suppementaryHeaderView = self.installedPluginsCollectionView.makeSupplementaryView(ofKind: .sectionHeader,
+        case NSCollectionView.elementKindSectionHeader:
+            let suppementaryHeaderView = self.installedPluginsCollectionView.makeSupplementaryView(ofKind: kind,
                                                                                                    withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionHeaderView"),
                                                                                                    for: indexPath) as! PluginSectionHeaderView
             suppementaryHeaderView.title = self.filteredPlugins[indexPath.section].pluginName
             suppementaryHeaderView.image = self.filteredPlugins[indexPath.section].image ?? NSImage.pluginIconPlaceholderImage
             suppementaryHeaderView.searchingString = self.searchField.stringValue
             return suppementaryHeaderView
-        case .sectionFooter:
-            return self.installedPluginsCollectionView.makeSupplementaryView(ofKind: .sectionFooter,
+        case NSCollectionView.elementKindSectionFooter:
+            return self.installedPluginsCollectionView.makeSupplementaryView(ofKind: kind,
                                                                              withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionFooterView"),
                                                                              for: indexPath)
         default:

@@ -203,7 +203,7 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         return newTitle
     }
     
-    public func pluginCommandAtIndexPath(_ indexPath: IndexPath) -> Command {
+    public func pluginCommandAtIndexPath(_ indexPath: IndexPath) -> PluginCommand {
         return self.filteredPlugins[indexPath.section].commands[indexPath.item]
     }
     
