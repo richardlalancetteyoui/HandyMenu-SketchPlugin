@@ -10,8 +10,11 @@
 extension SettingsWindowController: CollectionTableViewDelegate {
     
     // Changing cursor when dragging out of tableView
-    func collectionTableView(_ collectionTableView: CollectionTableView, draggingSession session: NSDraggingSession, movedTo screenPoint: NSPoint) {
-        if  let tableViewRect = self.window?.convertToScreen(self.collectionTableViewRect),
+    func collectionTableView(_ collectionTableView: CollectionTableView,
+                             draggingSession session: NSDraggingSession,
+                             movedTo screenPoint: NSPoint) {
+        
+        if let tableViewRect = self.window?.convertToScreen(self.collectionTableViewRect),
             !tableViewRect.contains(screenPoint) {
             NSCursor.disappearingItem.set()
         } else {

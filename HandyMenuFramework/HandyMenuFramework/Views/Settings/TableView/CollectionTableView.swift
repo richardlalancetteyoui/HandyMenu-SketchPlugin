@@ -7,8 +7,12 @@
 //
 
 protocol CollectionTableViewDelegate: class {
-    func deleteIsPressed(at rows:IndexSet)
-    func collectionTableView(_ collectionTableView: CollectionTableView, draggingSession session: NSDraggingSession, movedTo screenPoint: NSPoint)
+    
+    func deleteIsPressed(at rows: IndexSet)
+    
+    func collectionTableView(_ collectionTableView: CollectionTableView,
+                             draggingSession session: NSDraggingSession,
+                             movedTo screenPoint: NSPoint)
 }
 
 class CollectionTableView: NSTableView {

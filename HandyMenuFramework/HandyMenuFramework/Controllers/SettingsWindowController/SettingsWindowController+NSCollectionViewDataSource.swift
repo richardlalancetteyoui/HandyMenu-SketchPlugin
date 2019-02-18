@@ -18,33 +18,55 @@ extension SettingsWindowController: NSCollectionViewDataSource {
         return self.filteredPlugins[section].commands.count
     }
     
-    public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        guard let collectionViewItem = self.installedPluginsCollectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CommandCollectionViewItem"), for: indexPath) as? CommandCollectionViewItem else { return NSCollectionViewItem()}
+    public func collectionView(_ collectionView: NSCollectionView,
+                               itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        guard
+            let collectionViewItem = self.installedPluginsCollectionView.makeItem(
+            withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CommandCollectionViewItem"),
+            for: indexPath) as? CommandCollectionViewItem
+            else {
+                return NSCollectionViewItem()
+        }
+        
         let commandData = self.pluginCommandAtIndexPath(indexPath)
-        collectionViewItem.configure(commandData.name, isUsed: self.currentCollection.items.contains(.command(commandData)))
+        let isUsed = self.currentCollection.items.contains(.command(commandData))
+        collectionViewItem.configure(commandData.name, isUsed: isUsed)
         collectionViewItem.searchingString = self.searchField.stringValue
         collectionViewItem.delegate = self
         return collectionViewItem
     }
     
     // Configuring Views For Headers And Footers
-    public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
+    public func collectionView(_ collectionView: NSCollectionView,
+                               viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind,
+                               at indexPath: IndexPath) -> NSView {
         switch kind {
         case NSCollectionView.elementKindSectionHeader:
-            let suppementaryHeaderView = self.installedPluginsCollectionView.makeSupplementaryView(ofKind: kind,
-                                                                                                   withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionHeaderView"),
-                                                                                                   for: indexPath) as! PluginSectionHeaderView
+            guard
+                let suppementaryHeaderView = self.installedPluginsCollectionView.makeSupplementaryView(
+                ofKind: kind,
+                withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionHeaderView"),
+                for: indexPath) as? PluginSectionHeaderView
+                else {
+                    return NSView()
+            }
+            
             suppementaryHeaderView.title = self.filteredPlugins[indexPath.section].pluginName
-            suppementaryHeaderView.image = self.filteredPlugins[indexPath.section].image ?? NSImage.pluginIconPlaceholderImage
+            suppementaryHeaderView.image = self.filteredPlugins[indexPath.section].image
+                ?? NSImage.pluginIconPlaceholderImage
+            
             suppementaryHeaderView.searchingString = self.searchField.stringValue
             return suppementaryHeaderView
+            
         case NSCollectionView.elementKindSectionFooter:
-            return self.installedPluginsCollectionView.makeSupplementaryView(ofKind: kind,
-                                                                             withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionFooterView"),
-                                                                             for: indexPath)
+            
+            return self.installedPluginsCollectionView.makeSupplementaryView(
+                ofKind: kind,
+                withIdentifier: NSUserInterfaceItemIdentifier("PluginSectionFooterView"),
+                for: indexPath)
+            
         default:
             return NSView()
         }
     }
-    
 }

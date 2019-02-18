@@ -14,9 +14,9 @@ extension NSImage.Name {
 }
 
 extension NSImage {
-    static let pluginIconPlaceholderImage = Bundle(for: PluginController.self).image(forResource: .pluginIconPlaceholderImage)
-    static let searchIconImage = Bundle(for: PluginController.self).image(forResource: .searchIcon)
-    static let returnIconImage = Bundle(for: PluginController.self).image(forResource: .returnIcon)
+    static let pluginIconPlaceholderImage = Bundle.pluginBundle.image(forResource: .pluginIconPlaceholderImage)
+    static let searchIconImage = Bundle.pluginBundle.image(forResource: .searchIcon)
+    static let returnIconImage = Bundle.pluginBundle.image(forResource: .returnIcon)
     
     func tinted(by color: NSColor) -> NSImage {
         self.isTemplate = false
@@ -27,7 +27,7 @@ extension NSImage {
         
         color.set()
         
-        let imageRect = NSRect(origin: NSZeroPoint, size: image.size)
+        let imageRect = NSRect(origin: .zero, size: image.size)
         imageRect.fill(using: .sourceAtop)
         
         image.unlockFocus()

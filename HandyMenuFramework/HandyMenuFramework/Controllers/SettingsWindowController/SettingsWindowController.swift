@@ -7,8 +7,11 @@
 //
 
 public protocol SettingsWindowControllerDelegate: class {
-    func settingsWindowController(_ settingsWindowController: SettingsWindowController, didUpdate menuData:[Collection])
-    func settingsWindowController(didClose settingsWindowController: SettingsWindowController)
+    
+    func settingsWindowController(_ settingsWindowController: SettingsWindowController,
+                                  didUpdate menuData: [Collection])
+    
+    func settingsWindowControllerDidClose(_ settingsWindowController: SettingsWindowController)
 }
 
 public class SettingsWindowController: NSWindowController, SettingsWindowViewControllerDelegate {
@@ -67,12 +70,13 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         }
     }
     
-    public let commandHeight:CGFloat = 24.0
-    public let headerHeight:CGFloat = 48.0
+    public let commandHeight: CGFloat = 24.0
+    public let headerHeight: CGFloat = 48.0
     public let footerHeight: CGFloat = 32.0
     
     public var collectionTableViewRect: NSRect {
-        return NSInsetRect(self.currentCollectionTableView.convert(self.collectionsScrollView.bounds, to: nil), -10, -20)
+        let rect = self.currentCollectionTableView.convert(self.collectionsScrollView.bounds, to: nil)
+        return rect.insetBy(dx: -10, dy: -20)
     }
     
     // MARK: - Public Properties
@@ -109,7 +113,7 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         super.close()
         self.window?.makeFirstResponder(nil)
         self.shortcutField.finish(with: nil)
-        delegate?.settingsWindowController(didClose: self)
+        delegate?.settingsWindowControllerDidClose(self)
     }
     
     // Refreshing collectionView layout after resizing window (SettingsWindowViewControllerDelegate)
@@ -131,10 +135,10 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         self.selectCollection(at: self.collectionsPopUpButton.indexOfItem(withTitle: collection))
     }
     
-    public func configure(_ collections:[Collection]) {
+    public func configure(_ collections: [Collection]) {
         self.collections = collections
         
-        if self.collections.count == 0 {
+        if self.collections.isEmpty {
             self.collections.append(.emptyCollection)
         }
         
@@ -165,7 +169,7 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
                     separatorIndexes.insert(index)
                 }
             }
-            self.currentCollection.items = self.currentCollection.items.filter{ $0 != .separator }
+            self.currentCollection.items = self.currentCollection.items.filter { $0 != .separator }
             plugin_log("Filtered array: %@", String(describing: self.currentCollection.items))
             self.currentCollectionTableView.removeRows(at: separatorIndexes, withAnimation: .effectFade)
         }
@@ -174,14 +178,14 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
     private func toggleEmptyLabel() {
         NSAnimationContext.runAnimationGroup({ [unowned self] (context) in
             context.duration = 0.2
-            self.emptyListLabel.animator().alphaValue = self.currentCollection.items.count > 0 ? 0.0 : 1.0
+            self.emptyListLabel.animator().alphaValue = self.currentCollection.items.isEmpty ? 1.0 : 0.0
         })
     }
     
     private func toggleNoPluginsLabel() {
         NSAnimationContext.runAnimationGroup({ [unowned self] (context) in
             context.duration = 0.2
-            self.noPluginsLabel.animator().alphaValue = self.filteredPlugins.count > 0 ? 0.0 : 1.0
+            self.noPluginsLabel.animator().alphaValue = self.filteredPlugins.isEmpty ? 1.0 : 0.0
         })
     }
     
@@ -213,18 +217,19 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
         self.installedPluginsCollectionView.reloadData()
     }
     
-    
     // Filtering installedPlugins
-    private func filterInstalledPlugins(by searchString: String){
-        guard searchString.count > 0 else {
+    private func filterInstalledPlugins(by searchString: String) {
+        guard !searchString.isEmpty else {
             self.filteredPlugins = self.installedPlugins
             self.installedPluginsCollectionView.reloadData()
             return
         }
         
         DispatchQueue.global(qos: .default).async { [unowned self] in
-            self.filteredPlugins = self.installedPlugins.filter{$0.pluginName.localizedCaseInsensitiveContains(searchString) || $0.commands.contains(where: { $0.name.localizedCaseInsensitiveContains(searchString)}
-                )}
+            self.filteredPlugins = self.installedPlugins.filter {
+                $0.pluginName.localizedCaseInsensitiveContains(searchString) ||
+                $0.commands.contains(where: { $0.name.localizedCaseInsensitiveContains(searchString)})
+            }
             DispatchQueue.main.sync { [unowned self] in
                 self.installedPluginsCollectionView.reloadData()
                 self.installedPluginsCollectionView.scrollToVisible(NSRect.zero)
@@ -271,10 +276,14 @@ extension SettingsWindowController {
     @IBAction func renameCollection(_ sender: Any) {
         guard let window = self.window else { return }
         self.renamingPanel.value = self.currentCollection.title
-        self.renamingPanel.beginSheet(for: window) { [weak self] (response) in
-            guard let value = self?.renamingPanel.value,
+        self.renamingPanel.beginSheet(for: window) { [weak self] _ in
+            
+            guard
+                let value = self?.renamingPanel.value,
                 !value.isEmpty,
-                self?.collectionsPopUpButton.selectedItem?.title != value else { return }
+                self?.collectionsPopUpButton.selectedItem?.title != value
+                else { return }
+            
             if let strongSelf = self {
                 let newValue = strongSelf.collectionsPopUpButton.itemTitles.contains(value) ? value + " copy" : value
                 strongSelf.currentCollection.title = newValue
@@ -297,7 +306,7 @@ extension SettingsWindowController {
         newCollection.title = uniqueCollectionTitle()
         self.collections.insert(newCollection, at: newIndex)
         self.configureCollectionsPopUpButton()
-        self.selectCollection(at:newIndex)
+        self.selectCollection(at: newIndex)
     }
     
     @IBAction func popUpButtonDidChangeCollection(_ sender: Any) {
@@ -321,7 +330,6 @@ extension SettingsWindowController {
         self.configureAutoGrouping(for: checkboxState)
     }
     
-
     // Save/Cancel Buttons Actions
     @IBAction func save(_ sender: Any) {
         self.delegate?.settingsWindowController(self, didUpdate: collections)
@@ -338,5 +346,3 @@ extension SettingsWindowController {
     }
 
 }
-
-

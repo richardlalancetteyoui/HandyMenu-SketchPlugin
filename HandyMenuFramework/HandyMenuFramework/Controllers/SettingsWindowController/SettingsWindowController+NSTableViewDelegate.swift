@@ -19,13 +19,23 @@ extension SettingsWindowController: NSTableViewDelegate {
         let item = collections[currentCollectionIndex].items[row]
         switch item {
         case .command(let commandData):
-            guard let commandCell = currentCollectionTableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CommandCell"), owner: self) as? CommandTableViewItem else { return nil }
+            
+            guard let commandCell = currentCollectionTableView.makeView(
+                withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CommandCell"),
+                owner: self) as? CommandTableViewItem
+                else { return nil }
+            
             commandCell.title = commandData.name
             commandCell.toolTip = commandData.pluginName
             return commandCell
         case .separator:
-            guard let separatorCell = currentCollectionTableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SeparatorCell"), owner: self) else { return nil }
+            
+            guard let separatorCell = currentCollectionTableView.makeView(
+                withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SeparatorCell"),
+                owner: self) else { return nil }
+            
             return separatorCell
+            
         case .sketchCommand(let sketchCommand):
             // TODO
             return nil
@@ -34,16 +44,21 @@ extension SettingsWindowController: NSTableViewDelegate {
     
     // Handling Selection
     public func tableViewSelectionDidChange(_ notification: Notification) {
-        self.deleteItemButton.isEnabled = self.currentCollectionTableView.selectedRowIndexes.count != 0
+        self.deleteItemButton.isEnabled = !self.currentCollectionTableView.selectedRowIndexes.isEmpty
     }
     
     // Drag And Drop
-    public func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
+    public func tableView(_ tableView: NSTableView,
+                          validateDrop info: NSDraggingInfo,
+                          proposedRow row: Int,
+                          proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
         return NSDragOperation.link
     }
     
     // Writing moving item index into pasteboard at the begining of the drag
-    public func tableView(_ tableView: NSTableView, writeRowsWith rowIndexes: IndexSet, to pboard: NSPasteboard) -> Bool {
+    public func tableView(_ tableView: NSTableView,
+                          writeRowsWith rowIndexes: IndexSet,
+                          to pboard: NSPasteboard) -> Bool {
         self.currentCollectionTableView.selectRowIndexes(rowIndexes, byExtendingSelection: false)
         let data = NSKeyedArchiver.archivedData(withRootObject: rowIndexes)
         pboard.declareTypes([.string], owner: self)
@@ -60,11 +75,15 @@ extension SettingsWindowController: NSTableViewDelegate {
         self.installedPluginsCollectionView.reloadItems(at: [indexPath])
     }
     
-    public func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
+    public func tableView(_ tableView: NSTableView,
+                          acceptDrop info: NSDraggingInfo,
+                          row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
         guard let data = info.draggingPasteboard.data(forType: .string) else { return false }
         
-        if self.installedPluginsCollectionView.isEqual(info.draggingSource)  {
-            guard let sourceIndexPath = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexPath else { return false }
+        if self.installedPluginsCollectionView.isEqual(info.draggingSource) {
+            guard
+                let sourceIndexPath = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? IndexPath
+                else { return false }
             self.insertNewCommand(from: sourceIndexPath, to: row)
             return true
         } else if self.currentCollectionTableView.isEqual(info.draggingSource) {
@@ -82,12 +101,20 @@ extension SettingsWindowController: NSTableViewDelegate {
     }
     
     // Preventing animation after deleting
-    public func tableView(_ tableView: NSTableView, draggingSession session: NSDraggingSession, willBeginAt screenPoint: NSPoint, forRowIndexes rowIndexes: IndexSet) {
+    public func tableView(_ tableView: NSTableView,
+                          draggingSession session: NSDraggingSession,
+                          willBeginAt screenPoint: NSPoint,
+                          forRowIndexes rowIndexes: IndexSet) {
+        
         session.animatesToStartingPositionsOnCancelOrFail = false
     }
     
     // Deleting item if drop was outside tableView
-    public func tableView(_ tableView: NSTableView, draggingSession session: NSDraggingSession, endedAt screenPoint: NSPoint, operation: NSDragOperation) {
+    public func tableView(_ tableView: NSTableView,
+                          draggingSession session: NSDraggingSession,
+                          endedAt screenPoint: NSPoint,
+                          operation: NSDragOperation) {
+        
         if  let tableViewRect = self.window?.convertToScreen(self.collectionTableViewRect),
             !tableViewRect.contains(screenPoint),
             let data = session.draggingPasteboard.data(forType: .string),
@@ -96,7 +123,5 @@ extension SettingsWindowController: NSTableViewDelegate {
             self.removeCommand(at: rowToDelete)
         }
     }
-    
-
     
 }

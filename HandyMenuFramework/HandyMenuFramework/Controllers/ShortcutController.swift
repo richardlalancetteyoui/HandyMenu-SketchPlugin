@@ -6,14 +6,17 @@
 //  Copyright © 2018 Sergey Dmitriev. All rights reserved.
 //
 public protocol ShortcutControllerDelegate: class {
-    func shortcutController(_ shortcutController: ShortcutController, didRecognize shortcut: Shortcut, in event: NSEvent) -> NSEvent?
+    
+    func shortcutController(_ shortcutController: ShortcutController,
+                            didRecognize shortcut: Shortcut,
+                            in event: NSEvent) -> NSEvent?
 }
 
 public class ShortcutController {
     
     // MARK: - Private Variables
-    private var keyDownMonitor:Any?
-    private var keyUpMonitor:Any?
+    private var keyDownMonitor: Any?
+    private var keyUpMonitor: Any?
     
     // MARK: - Public Variables
     public var currentShortcut = Shortcut.empty

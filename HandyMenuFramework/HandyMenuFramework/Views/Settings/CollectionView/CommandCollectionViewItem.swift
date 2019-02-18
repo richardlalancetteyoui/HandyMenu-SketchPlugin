@@ -19,11 +19,12 @@ class CommandCollectionViewItem: NSCollectionViewItem {
     public var isUsed: Bool = false {
         didSet {
             self.textField?.stringValue = self.isUsed ? "✓ " + commandName : commandName
-            self.textField?.textColor = self.isUsed ? NSColor.controlTextColor.withAlphaComponent(0.3) : .controlTextColor
+            self.textField?.textColor = self.isUsed ?
+                NSColor.controlTextColor.withAlphaComponent(0.3) : .controlTextColor
         }
     }
     
-    public var commandName:String = "" {
+    public var commandName: String = "" {
         didSet {
             self.textField?.stringValue = self.commandName
         }
@@ -35,13 +36,12 @@ class CommandCollectionViewItem: NSCollectionViewItem {
             let textField = self.textField else { return }
             let range = (textField.stringValue as NSString).range(of: self.searchingString, options: .caseInsensitive)
             let attributedString = NSMutableAttributedString(string: textField.stringValue)
-            attributedString.setAttributes([.backgroundColor : NSColor.selectedTextBackgroundColor], range: range)
+            attributedString.setAttributes([.backgroundColor: NSColor.selectedTextBackgroundColor], range: range)
             self.textField?.attributedStringValue = attributedString
         }
     }
     
-    
-    public func configure(_ commandName: String, isUsed:Bool) {
+    public func configure(_ commandName: String, isUsed: Bool) {
         self.commandName = commandName
         self.isUsed = isUsed
     }
@@ -53,7 +53,8 @@ class CommandCollectionViewItem: NSCollectionViewItem {
     }
     
     func setHighlight(_ selected: Bool) {
-        self.view.layer?.backgroundColor = selected ? NSColor.alternateSelectedControlColor.cgColor : NSColor.clear.cgColor
+        self.view.layer?.backgroundColor = selected ?
+            NSColor.alternateSelectedControlColor.cgColor : NSColor.clear.cgColor
         self.textField?.textColor = selected ? .white : .controlTextColor
     }
     

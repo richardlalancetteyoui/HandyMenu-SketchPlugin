@@ -31,7 +31,7 @@ public class SearchField: NSView, NSTextFieldDelegate {
     public var stringValue: String {
         set {
             self.textField.stringValue = newValue
-            let isEmpty = (newValue.count == 0)
+            let isEmpty = newValue.isEmpty
             self.clearButton.isHidden = isEmpty
             self.delegate?.searchField(self, didChanged: newValue)
         }
@@ -53,7 +53,7 @@ public class SearchField: NSView, NSTextFieldDelegate {
     private func prepare() {
         self.addSubview(self.contentView)
         self.contentView.frame = self.bounds
-        self.contentView.autoresizingMask = [.width,.height]
+        self.contentView.autoresizingMask = [.width, .height]
         self.textField.delegate = self
         self.render(for: .inactive)
         self.textField.onFocus = { [unowned self] in
@@ -101,7 +101,6 @@ public class SearchField: NSView, NSTextFieldDelegate {
         self.stringValue = ""
     }
 }
-
 
 class ResponsiveTextField: NSTextField {
     

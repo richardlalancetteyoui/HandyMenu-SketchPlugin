@@ -11,7 +11,7 @@ public enum CollectionItem: Equatable {
     case sketchCommand(SketchCommand)
     case separator
     
-    private enum CodingKeys:String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case data
     }
@@ -49,7 +49,3 @@ extension CollectionItem: Decodable {
         }
     }
 }
-
-
-
-

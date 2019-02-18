@@ -12,7 +12,7 @@ class InputPanel: NSPanel {
     
     @IBOutlet private weak var inputTextField: NSTextField!
     
-    public var value:String {
+    public var value: String {
         set {
             self.inputTextField.stringValue = newValue
         }
@@ -21,7 +21,8 @@ class InputPanel: NSPanel {
         }
     }
     
-    public func beginSheet(for window: NSWindow, completionHandler handler:((NSApplication.ModalResponse) -> Void)? = nil) {
+    public func beginSheet(for window: NSWindow,
+                           completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil) {
         window.beginSheet(self, completionHandler: handler)
     }
     

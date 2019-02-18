@@ -5,7 +5,7 @@
 //  Created by Sergey Dmitriev on 10/06/2018.
 //  Copyright © 2018 Sergey Dmitriev. All rights reserved.
 //
-@objc(HandyMenuPlugin) class PluginController:NSObject {
+@objc(HandyMenuPlugin) class PluginController: NSObject {
     
     // MARK: - Singletone instance
     @objc static let shared = PluginController()
@@ -43,7 +43,6 @@
     
 }
 
-
 // MARK: - PluginDataControllerDelegate
 extension PluginController: DataControllerDelegate {
     
@@ -60,21 +59,30 @@ extension PluginController: DataControllerDelegate {
 
 // MARK: - ShortcutControllerDelegate
 extension PluginController: ShortcutControllerDelegate {
-    func shortcutController(_ shortcutController: ShortcutController, didRecognize shortcut: Shortcut, in event: NSEvent) -> NSEvent? {
-        guard NSDocumentController.shared.documents.count > 0,
-            self.dataController.usedShortcuts.contains(shortcut.hashValue) else { return event }
+    
+    func shortcutController(_ shortcutController: ShortcutController,
+                            didRecognize shortcut: Shortcut,
+                            in event: NSEvent) -> NSEvent? {
+        
+        guard !NSDocumentController.shared.documents.isEmpty,
+            self.dataController.usedShortcuts.contains(shortcut.hashValue)
+            else { return event }
         self.menuController.show(for: shortcut)
         return nil
     }
+    
 }
 
 // MARK: - SettingsWindowControllerDelegate
 extension PluginController: SettingsWindowControllerDelegate {
-    func settingsWindowController(_ settingsWindowController: SettingsWindowController, didUpdate menuData: [Collection]) {
+    
+    func settingsWindowController(_ settingsWindowController: SettingsWindowController,
+                                  didUpdate menuData: [Collection]) {
         self.dataController.saveCollections(menuData)
     }
     
-    func settingsWindowController(didClose settingsWindowController: SettingsWindowController) {
+    func settingsWindowControllerDidClose(_ settingsWindowController: SettingsWindowController) {
         self.shortcutController.start()
     }
+    
 }

@@ -6,8 +6,10 @@
 //  Copyright © 2018 Sergey Dmitriev. All rights reserved.
 //
 
-protocol ShortcutFieldDelegate:class {
-    func shortcutField(_ shortcutField: ShortcutField, didChange shortcut:Shortcut)
+protocol ShortcutFieldDelegate: class {
+    
+    func shortcutField(_ shortcutField: ShortcutField, didChange shortcut: Shortcut)
+    
 }
 
 class ShortcutField: NSView {
@@ -26,8 +28,8 @@ class ShortcutField: NSView {
     private var shortcutController: ShortcutController = ShortcutController()
     private var mouseDownMonitor: Any?
     
-    private let stoppingKeyCodes:Set<UInt16> = [36, 53, 76] // Enter, Esc, Return keys codes
-    private let deleteKeyCode:UInt16 = 51 // Delete key code
+    private let stoppingKeyCodes: Set<UInt16> = [36, 53, 76] // Enter, Esc, Return keys codes
+    private let deleteKeyCode: UInt16 = 51 // Delete key code
     
     private var state: State = .inactive
     
@@ -47,7 +49,7 @@ class ShortcutField: NSView {
             nib.instantiate(withOwner: self, topLevelObjects: nil)
             self.addSubview(self.contentView)
             self.contentView.frame = self.bounds
-            self.contentView.autoresizingMask = [.width,.height]
+            self.contentView.autoresizingMask = [.width, .height]
             shortcutController.delegate = self
             render(for: .inactive)
         }
@@ -84,7 +86,7 @@ class ShortcutField: NSView {
         self.needsDisplay = true
     }
     
-    public func finish(with shortcut:Shortcut?) {
+    public func finish(with shortcut: Shortcut?) {
         shortcutController.stop()
         render(for: .inactive)
         self.shortcut = shortcut ?? self.shortcut
@@ -97,7 +99,11 @@ class ShortcutField: NSView {
 }
 
 extension ShortcutField: ShortcutControllerDelegate {
-    func shortcutController(_ shortcutController: ShortcutController, didRecognize shortcut: Shortcut, in event: NSEvent) -> NSEvent? {
+    
+    func shortcutController(_ shortcutController: ShortcutController,
+                            didRecognize shortcut: Shortcut,
+                            in event: NSEvent) -> NSEvent? {
+        
         let newShortcut: Shortcut
         switch event.keyCode {
         case deleteKeyCode:
@@ -110,5 +116,6 @@ extension ShortcutField: ShortcutControllerDelegate {
         finish(with: newShortcut)
         delegate?.shortcutField(self, didChange: newShortcut)
         return nil
+        
     }
 }

@@ -8,9 +8,9 @@
 public class MenuController {
     
     // MARK: - Private Variables
-    private var menus: [Int:NSMenu] = [:]
+    private var menus = [Int: NSMenu]()
     
-    public func configure(for collections:[Collection]) {
+    public func configure(for collections: [Collection]) {
         self.menus = [:]
         for collectionData in collections {
             let newMenu = HandyMenu()
@@ -21,10 +21,9 @@ public class MenuController {
     
     public func show(for shortcut: Shortcut) {
         if let menu = self.menus[shortcut.hashValue],
-            let positionInWindow = NSApp.mainWindow?.convertPoint(fromScreen: NSEvent.mouseLocation){
+            let positionInWindow = NSApp.mainWindow?.convertPoint(fromScreen: NSEvent.mouseLocation) {
             menu.popUp(positioning: nil, at: positionInWindow, in: NSApp.mainWindow?.contentView)
         }
     }
-    
     
 }

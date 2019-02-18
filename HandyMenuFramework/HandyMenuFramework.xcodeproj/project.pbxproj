@@ -10,6 +10,8 @@
 		A508BF05210F579E00024995 /* ShortcutField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A508BF03210F579D00024995 /* ShortcutField.swift */; };
 		A508BF06210F579E00024995 /* ShortcutField.xib in Resources */ = {isa = PBXBuildFile; fileRef = A508BF04210F579D00024995 /* ShortcutField.xib */; };
 		A508BF0A210F96F100024995 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A508BF09210F96F100024995 /* Utils.swift */; };
+		A5110F65221B57C300E3C914 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5110F64221B57C300E3C914 /* Bundle.swift */; };
+		A5110F66221B680D00E3C914 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon,) */ = {isa = PBXBuildFile; fileRef = A5A65C5E20FBFECB00BBB6A8 /* HandyMenuFramework.framework */; };
 		A521562720FD3A0B002A5816 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A521562620FD3A0B002A5816 /* MenuController.swift */; };
 		A52A317E20FEB6A900E64617 /* ShortcutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A317D20FEB6A900E64617 /* ShortcutController.swift */; };
 		A52D36E821138F8000FD2874 /* InstalledPluginsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52D36E721138F8000FD2874 /* InstalledPluginsCollectionView.swift */; };
@@ -58,18 +60,17 @@
 		A5D2012421DED168007A7416 /* icon.png in Copy Files to the Plugin's bundle (Framework + Icon,) */ = {isa = PBXBuildFile; fileRef = A5D2012221DED11D007A7416 /* icon.png */; };
 		A5D2012521DED16B007A7416 /* manifest.json in Copy Files to the Plugin's bundle (Manifest + Script) */ = {isa = PBXBuildFile; fileRef = A5D2011E21DED10F007A7416 /* manifest.json */; };
 		A5D2012621DED16B007A7416 /* script.js in Copy Files to the Plugin's bundle (Manifest + Script) */ = {isa = PBXBuildFile; fileRef = A5D2011F21DED10F007A7416 /* script.js */; };
-		A5E23F5921DEA0E70072D2E4 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon,) */ = {isa = PBXBuildFile; fileRef = A5A65C5E20FBFECB00BBB6A8 /* HandyMenuFramework.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A5E23F5821DEA0C80072D2E4 /* Copy Files to the Plugin's bundle (Framework + Icon,) */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = HandyMenu.sketchplugin/Contents/Resources;
-			dstSubfolderSpec = 16;
+			dstPath = "Users/Sergey/Dev/HandyMenu-SketchPlugin/HandyMenu.sketchplugin/Contents/Resources";
+			dstSubfolderSpec = 0;
 			files = (
+				A5110F66221B680D00E3C914 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon,) */,
 				A5D2012421DED168007A7416 /* icon.png in Copy Files to the Plugin's bundle (Framework + Icon,) */,
-				A5E23F5921DEA0E70072D2E4 /* HandyMenuFramework.framework in Copy Files to the Plugin's bundle (Framework + Icon,) */,
 			);
 			name = "Copy Files to the Plugin's bundle (Framework + Icon,)";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,7 +78,7 @@
 		A5E23F5B21DEA0F40072D2E4 /* Copy Files to the Plugin's bundle (Manifest + Script) */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = HandyMenu.sketchplugin/Contents/Sketch;
+			dstPath = "Users/Sergey/Dev/HandyMenu-SketchPlugin/HandyMenu.sketchplugin/Contents/Sketch";
 			dstSubfolderSpec = 16;
 			files = (
 				A5D2012521DED16B007A7416 /* manifest.json in Copy Files to the Plugin's bundle (Manifest + Script) */,
@@ -92,6 +93,7 @@
 		A508BF03210F579D00024995 /* ShortcutField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortcutField.swift; sourceTree = "<group>"; };
 		A508BF04210F579D00024995 /* ShortcutField.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShortcutField.xib; sourceTree = "<group>"; };
 		A508BF09210F96F100024995 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		A5110F64221B57C300E3C914 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		A521562620FD3A0B002A5816 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuController.swift; path = HandyMenuFramework/Controllers/MenuController.swift; sourceTree = SOURCE_ROOT; };
 		A52A317D20FEB6A900E64617 /* ShortcutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortcutController.swift; sourceTree = "<group>"; };
 		A52D36E721138F8000FD2874 /* InstalledPluginsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstalledPluginsCollectionView.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			children = (
 				A5398D1A21165A8600BD70EF /* NSImage.swift */,
 				A54EA40C211910D500C56E01 /* NSNib.swift */,
+				A5110F64221B57C300E3C914 /* Bundle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				A5A65C5C20FBFECB00BBB6A8 /* Resources */,
 				A5E23F5821DEA0C80072D2E4 /* Copy Files to the Plugin's bundle (Framework + Icon,) */,
 				A5E23F5B21DEA0F40072D2E4 /* Copy Files to the Plugin's bundle (Manifest + Script) */,
+				A5262FC5221B53210029D189 /* Run Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -418,7 +422,7 @@
 		A5A65C5520FBFECB00BBB6A8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Sergey Dmitriev";
 				TargetAttributes = {
 					A5A65C5D20FBFECB00BBB6A8 = {
@@ -464,12 +468,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A5262FC5221B53210029D189 /* Run Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Swiftlint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A5A65C5920FBFECB00BBB6A8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A58FC0E120FF87F2004730BB /* HMCommandScheme.m in Sources */,
+				A5110F65221B57C300E3C914 /* Bundle.swift in Sources */,
 				A5380544210DDCD30026E4A5 /* CommandTableViewItem.swift in Sources */,
 				A53A829520FF726600FD83FA /* HandyMenu.swift in Sources */,
 				A5AA666E20FFB10B0027BC45 /* SketchAppBridge.m in Sources */,
@@ -633,7 +659,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -664,7 +689,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;

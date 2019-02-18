@@ -7,8 +7,8 @@
 //
 
 public struct PluginCommand: Codable, Equatable {
-    public var name:String
-    public var commandID:String
+    public var name: String
+    public var commandID: String
     public var pluginName: String
-    public var pluginID:String
+    public var pluginID: String
 }
