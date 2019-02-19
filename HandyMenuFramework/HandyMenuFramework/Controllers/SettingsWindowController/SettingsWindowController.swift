@@ -16,66 +16,59 @@ public protocol SettingsWindowControllerDelegate: class {
 
 public class SettingsWindowController: NSWindowController, SettingsWindowViewControllerDelegate {
     
-    // MARK: - Private Outlets
-    @IBOutlet private weak var versionLabel: NSTextField!
-    @IBOutlet private weak var noPluginsLabel: NSTextField! {
+    // MARK: - Outlets
+    @IBOutlet weak var versionLabel: NSTextField!
+    @IBOutlet weak var noPluginsLabel: NSTextField! {
         didSet {
-            self.noPluginsLabel.alphaValue = 0.0
+            noPluginsLabel.alphaValue = 0.0
         }
     }
     @IBOutlet private weak var emptyListLabel: NSTextField! {
         didSet {
-            self.emptyListLabel.alphaValue = 0.0
+            emptyListLabel.alphaValue = 0.0
         }
     }
-    @IBOutlet private weak var collectionsPopUpButton: NSPopUpButton!
-    @IBOutlet private weak var collectionSettingsMenu: NSMenu!
-    @IBOutlet private weak var removeMenuItem: NSMenuItem!
-    @IBOutlet private weak var shortcutField: ShortcutField!
-    @IBOutlet private weak var insertSeparatorButton: NSButton!
-    @IBOutlet private weak var autoGroupingCheckboxButton: NSButton!
-    @IBOutlet private weak var collectionsScrollView: NSScrollView!
-    @IBOutlet private weak var renamingPanel: InputPanel!
-    
-    // MARK: - Public Outlets
-    @IBOutlet public weak var searchField: SearchField!
-    @IBOutlet public weak var installedPluginsCollectionView: NSCollectionView!
-    @IBOutlet public weak var deleteItemButton: NSButton!
-    @IBOutlet public weak var currentCollectionTableView: NSTableView! {
-        didSet {
-            // Fixing the first column width
-            self.currentCollectionTableView.sizeToFit()
-        }
-    }
+    @IBOutlet weak var collectionsPopUpButton: NSPopUpButton!
+    @IBOutlet weak var collectionSettingsMenu: NSMenu!
+    @IBOutlet weak var removeMenuItem: NSMenuItem!
+    @IBOutlet weak var shortcutField: ShortcutField!
+    @IBOutlet weak var insertSeparatorButton: NSButton!
+    @IBOutlet weak var autoGroupingCheckboxButton: NSButton!
+    @IBOutlet weak var collectionsScrollView: NSScrollView!
+    @IBOutlet weak var renamingPanel: InputPanel!
+    @IBOutlet weak var searchField: SearchField!
+    @IBOutlet weak var installedPluginsCollectionView: NSCollectionView!
+    @IBOutlet weak var deleteItemButton: NSButton!
+    @IBOutlet weak var currentCollectionTableView: NSTableView!
     
     // MARK: - Private Properties
-    private let windowViewController = SettingsWindowViewController()
+    let windowViewController = SettingsWindowViewController()
     
-    public var currentCollectionIndex: Int = 0
-    public var collections: [Collection] = []
+    var currentCollectionIndex: Int = 0
+    var collections: [Collection] = []
     
-    public var filteredPlugins: [InstalledPluginData] = [] {
+    var filteredPlugins: [InstalledPluginData] = [] {
         didSet {
-            self.toggleNoPluginsLabel()
+            toggleNoPluginsLabel()
         }
     }
     
-    public var currentCollection: Collection {
+    var currentCollection: Collection {
         get {
-            return self.collections[self.currentCollectionIndex]
+            return collections[currentCollectionIndex]
         }
         set {
-            self.collections[self.currentCollectionIndex] = newValue
-            self.toggleEmptyLabel()
+            collections[currentCollectionIndex] = newValue
+            toggleEmptyLabel()
         }
     }
     
-    public let commandHeight: CGFloat = 24.0
-    public let headerHeight: CGFloat = 48.0
-    public let footerHeight: CGFloat = 32.0
+    let commandHeight: CGFloat = 24.0
+    let headerHeight: CGFloat = 48.0
+    let footerHeight: CGFloat = 32.0
     
     public var collectionTableViewRect: NSRect {
-        let rect = self.currentCollectionTableView.convert(self.collectionsScrollView.bounds, to: nil)
+        let rect = currentCollectionTableView.convert(collectionsScrollView.bounds, to: nil)
         return rect.insetBy(dx: -10, dy: -20)
     }
     
@@ -87,52 +80,55 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
     override public func windowDidLoad() {
         super.windowDidLoad()
         
-        self.installedPluginsCollectionView.delegate = self
-        self.installedPluginsCollectionView.dataSource = self
-        self.installedPluginsCollectionView.registerForDraggedTypes([.string])
-        self.installedPluginsCollectionView.setDraggingSourceOperationMask(.link, forLocal: false)
+        installedPluginsCollectionView.delegate = self
+        installedPluginsCollectionView.dataSource = self
+        installedPluginsCollectionView.registerForDraggedTypes([.string])
+        installedPluginsCollectionView.setDraggingSourceOperationMask(.link, forLocal: false)
         
-        self.currentCollectionTableView.delegate = self
-        self.currentCollectionTableView.dataSource = self
-        self.currentCollectionTableView.reloadData()
-        self.currentCollectionTableView.registerForDraggedTypes([.string])
-        self.currentCollectionTableView.setDraggingSourceOperationMask(.move, forLocal: true)
+        currentCollectionTableView.delegate = self
+        currentCollectionTableView.dataSource = self
+        currentCollectionTableView.reloadData()
+        currentCollectionTableView.registerForDraggedTypes([.string])
+        currentCollectionTableView.setDraggingSourceOperationMask(.move, forLocal: true)
         
-        self.windowViewController.delegate = self
-        self.windowViewController.view = self.window!.contentView!
-        self.window?.contentViewController = self.windowViewController
+        // Fixing the first column width
+        currentCollectionTableView.sizeToFit()
         
-        self.shortcutField.delegate = self
+        windowViewController.delegate = self
+        windowViewController.view = window!.contentView!
+        window?.contentViewController = windowViewController
         
-        self.searchField.delegate = self
+        shortcutField.delegate = self
         
-        self.configure(collections)
+        searchField.delegate = self
+        
+        configure(collections)
     }
     
     public override func close() {
         super.close()
-        self.window?.makeFirstResponder(nil)
-        self.shortcutField.finish(with: nil)
+        window?.makeFirstResponder(nil)
+        shortcutField.finish(with: nil)
         delegate?.settingsWindowControllerDidClose(self)
     }
     
     // Refreshing collectionView layout after resizing window (SettingsWindowViewControllerDelegate)
     public func viewWillLayout() {
-        self.installedPluginsCollectionView.collectionViewLayout?.invalidateLayout()
+        installedPluginsCollectionView.collectionViewLayout?.invalidateLayout()
     }
     
     // Reseting selection if click on empty space
     public override func mouseDown(with event: NSEvent) {
-        self.window?.makeFirstResponder(nil)
-        self.installedPluginsCollectionView.deselectAll(nil)
-        self.currentCollectionTableView.deselectAll(nil)
-        self.shortcutField.finish(with: nil)
+        window?.makeFirstResponder(nil)
+        installedPluginsCollectionView.deselectAll(nil)
+        currentCollectionTableView.deselectAll(nil)
+        shortcutField.finish(with: nil)
         super.mouseDown(with: event)
     }
     
     // Public Methods
     public func showCollection(_ collection: String) {
-        self.selectCollection(at: self.collectionsPopUpButton.indexOfItem(withTitle: collection))
+        selectCollection(at: collectionsPopUpButton.indexOfItem(withTitle: collection))
     }
     
     public func configure(_ collections: [Collection]) {
@@ -142,86 +138,86 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
             self.collections.append(.emptyCollection)
         }
         
-        if self.isWindowLoaded {
-            self.currentCollectionTableView.reloadData()
-            self.configureCollectionsPopUpButton()
-            self.selectCollection(at: self.collections.startIndex)
-            self.filterInstalledPlugins(by: "")
-            self.versionLabel.stringValue = "Version \(PluginData.currentVersion)"
+        if isWindowLoaded {
+            currentCollectionTableView.reloadData()
+            configureCollectionsPopUpButton()
+            selectCollection(at: collections.startIndex)
+            filterInstalledPlugins(by: "")
+            versionLabel.stringValue = "Version \(PluginData.currentVersion)"
         }
     }
     
     // Private Methods
     private func configureCollectionsPopUpButton() {
-        self.collectionsPopUpButton.removeAllItems()
-        self.collectionsPopUpButton.addItems(withTitles: self.collections.map({$0.title}))
+        collectionsPopUpButton.removeAllItems()
+        collectionsPopUpButton.addItems(withTitles: collections.map({$0.title}))
     }
     
     private func configureAutoGrouping(for autoGroupingOn: Bool) {
-        self.currentCollection.autoGrouping = autoGroupingOn
-        self.insertSeparatorButton.isEnabled = !autoGroupingOn
-        self.autoGroupingCheckboxButton.state = autoGroupingOn ? .on : .off
+        currentCollection.autoGrouping = autoGroupingOn
+        insertSeparatorButton.isEnabled = !autoGroupingOn
+        autoGroupingCheckboxButton.state = autoGroupingOn ? .on : .off
         
-        if autoGroupingOn, self.currentCollection.items.contains(.separator) {
+        if autoGroupingOn, currentCollection.items.contains(.separator) {
             var separatorIndexes: IndexSet = []
-            for (index, item) in self.currentCollection.items.enumerated() {
+            for (index, item) in currentCollection.items.enumerated() {
                 if case CollectionItem.separator = item {
                     separatorIndexes.insert(index)
                 }
             }
-            self.currentCollection.items = self.currentCollection.items.filter { $0 != .separator }
-            plugin_log("Filtered array: %@", String(describing: self.currentCollection.items))
-            self.currentCollectionTableView.removeRows(at: separatorIndexes, withAnimation: .effectFade)
+            currentCollection.items = currentCollection.items.filter { $0 != .separator }
+            plugin_log("Filtered array: %@", String(describing: currentCollection.items))
+            currentCollectionTableView.removeRows(at: separatorIndexes, withAnimation: .effectFade)
         }
     }
     
     private func toggleEmptyLabel() {
         NSAnimationContext.runAnimationGroup({ [unowned self] (context) in
             context.duration = 0.2
-            self.emptyListLabel.animator().alphaValue = self.currentCollection.items.isEmpty ? 1.0 : 0.0
+            emptyListLabel.animator().alphaValue = currentCollection.items.isEmpty ? 1.0 : 0.0
         })
     }
     
     private func toggleNoPluginsLabel() {
         NSAnimationContext.runAnimationGroup({ [unowned self] (context) in
             context.duration = 0.2
-            self.noPluginsLabel.animator().alphaValue = self.filteredPlugins.isEmpty ? 1.0 : 0.0
+            noPluginsLabel.animator().alphaValue = filteredPlugins.isEmpty ? 1.0 : 0.0
         })
     }
     
     private func selectCollection(at index: Int) {
-        self.currentCollectionIndex = index
-        self.collectionsPopUpButton.selectItem(at: index)
-        self.installedPluginsCollectionView.reloadData()
-        self.currentCollectionTableView.reloadData()
-        self.shortcutField.shortcut = self.currentCollection.shortcut
-        self.configureAutoGrouping(for: self.currentCollection.autoGrouping)
+        currentCollectionIndex = index
+        collectionsPopUpButton.selectItem(at: index)
+        installedPluginsCollectionView.reloadData()
+        currentCollectionTableView.reloadData()
+        shortcutField.shortcut = currentCollection.shortcut
+        configureAutoGrouping(for: currentCollection.autoGrouping)
     }
     
     private func uniqueCollectionTitle() -> String {
         var newTitle = ""
-        for freeIndex in 0...self.collections.endIndex {
+        for freeIndex in 0...collections.endIndex {
             newTitle = "New Collection \(freeIndex + 1)"
-            guard self.collectionsPopUpButton.itemTitles.contains(newTitle) else { break }
+            guard collectionsPopUpButton.itemTitles.contains(newTitle) else { break }
         }
         return newTitle
     }
     
     public func pluginCommandAtIndexPath(_ indexPath: IndexPath) -> PluginCommand {
-        return self.filteredPlugins[indexPath.section].commands[indexPath.item]
+        return filteredPlugins[indexPath.section].commands[indexPath.item]
     }
     
     public func removeCommand(at row: IndexSet.Element) {
-        self.currentCollection.items.remove(at: row)
-        self.currentCollectionTableView.removeRows(at: [row], withAnimation: .effectFade)
-        self.installedPluginsCollectionView.reloadData()
+        currentCollection.items.remove(at: row)
+        currentCollectionTableView.removeRows(at: [row], withAnimation: .effectFade)
+        installedPluginsCollectionView.reloadData()
     }
     
     // Filtering installedPlugins
     private func filterInstalledPlugins(by searchString: String) {
         guard !searchString.isEmpty else {
-            self.filteredPlugins = self.installedPlugins
-            self.installedPluginsCollectionView.reloadData()
+            filteredPlugins = installedPlugins
+            installedPluginsCollectionView.reloadData()
             return
         }
         
@@ -242,22 +238,22 @@ public class SettingsWindowController: NSWindowController, SettingsWindowViewCon
 extension SettingsWindowController: CommandCollectionViewItemDelegate {
     //Handling double click (CommandCollectionViewItemDelegate)
     func doubleClick(on item: CommandCollectionViewItem) {
-        guard let sourceIndexPath = self.installedPluginsCollectionView.indexPath(for: item) else { return }
-        self.insertNewCommand(from: sourceIndexPath, to: self.currentCollection.items.endIndex)
+        guard let sourceIndexPath = installedPluginsCollectionView.indexPath(for: item) else { return }
+        insertNewCommand(from: sourceIndexPath, to: currentCollection.items.endIndex)
     }
 }
 
 // MARK: - ShortcutFieldDelegate
 extension SettingsWindowController: ShortcutFieldDelegate {
     func shortcutField(_ shortcutField: ShortcutField, didChange shortcut: Shortcut) {
-        self.currentCollection.shortcut = shortcut
+        currentCollection.shortcut = shortcut
     }
 }
 
 // MARK: - SearchField Delegate {
 extension SettingsWindowController: SearchFieldDelegate {
     public func searchField(_ searchField: SearchField, didChanged value: String) {
-        self.filterInstalledPlugins(by: value)
+        filterInstalledPlugins(by: value)
     }
 }
 
@@ -266,78 +262,79 @@ extension SettingsWindowController {
     
     // Managing Selected Collection
     @IBAction func openCollectionSettings(_ sender: Any) {
-        self.removeMenuItem.isEnabled = self.collections.count > 1 ? true : false
+        removeMenuItem.isEnabled = collections.count > 1 ? true : false
         if let sender = sender as? NSButton {
             let point = NSPoint(x: 0, y: sender.bounds.height)
-            self.collectionSettingsMenu.popUp(positioning: nil, at: point, in: sender)
+            collectionSettingsMenu.popUp(positioning: nil, at: point, in: sender)
         }
     }
     
     @IBAction func renameCollection(_ sender: Any) {
-        guard let window = self.window else { return }
-        self.renamingPanel.value = self.currentCollection.title
-        self.renamingPanel.beginSheet(for: window) { [weak self] _ in
+        guard let window = window else { return }
+        renamingPanel.value = currentCollection.title
+        renamingPanel.beginSheet(for: window) { [weak self] _ in
+            
+            guard let self = self else { return }
+            let value = self.renamingPanel.value
             
             guard
-                let value = self?.renamingPanel.value,
                 !value.isEmpty,
-                self?.collectionsPopUpButton.selectedItem?.title != value
+                let selectedItem = self.collectionsPopUpButton.selectedItem,
+                !selectedItem.title.isEqual(value)
                 else { return }
             
-            if let strongSelf = self {
-                let newValue = strongSelf.collectionsPopUpButton.itemTitles.contains(value) ? value + " copy" : value
-                strongSelf.currentCollection.title = newValue
-                strongSelf.collectionsPopUpButton.selectedItem?.title = newValue
-            }
+                let newValue = self.collectionsPopUpButton.itemTitles.contains(value) ? value + " copy" : value
+                self.currentCollection.title = newValue
+                self.collectionsPopUpButton.selectedItem?.title = newValue
         }
     }
     
     @IBAction func removeCollection(_ sender: Any) {
-        self.collections.remove(at: self.currentCollectionIndex)
-        let lastIndex = self.collections.index(before: self.collections.endIndex)
-        let newIndex = (self.currentCollectionIndex > lastIndex) ? lastIndex : currentCollectionIndex
-        self.configureCollectionsPopUpButton()
-        self.selectCollection(at: newIndex)
+        collections.remove(at: currentCollectionIndex)
+        let lastIndex = collections.index(before: collections.endIndex)
+        let newIndex = (currentCollectionIndex > lastIndex) ? lastIndex : currentCollectionIndex
+        configureCollectionsPopUpButton()
+        selectCollection(at: newIndex)
     }
     
     @IBAction func addNewCollection(_ sender: Any) {
-        let newIndex = self.collections.endIndex
+        let newIndex = collections.endIndex
         var newCollection = Collection.emptyCollection
         newCollection.title = uniqueCollectionTitle()
-        self.collections.insert(newCollection, at: newIndex)
-        self.configureCollectionsPopUpButton()
-        self.selectCollection(at: newIndex)
+        collections.insert(newCollection, at: newIndex)
+        configureCollectionsPopUpButton()
+        selectCollection(at: newIndex)
     }
     
     @IBAction func popUpButtonDidChangeCollection(_ sender: Any) {
-        self.selectCollection(at: self.collectionsPopUpButton.indexOfSelectedItem)
+        selectCollection(at: collectionsPopUpButton.indexOfSelectedItem)
     }
     
     // Managing Collection's Items
     @IBAction func deleteSelectedItem(_ sender: Any) {
-        let row = self.currentCollectionTableView.selectedRow
-        self.removeCommand(at: row)
+        let row = currentCollectionTableView.selectedRow
+        removeCommand(at: row)
     }
     
     @IBAction func insertSeparator(_ sender: Any) {
-        let index = self.currentCollection.items.endIndex
-        self.currentCollection.items.insert(.separator, at: index)
-        self.currentCollectionTableView.insertRows(at: [index], withAnimation: .effectFade)
+        let index = currentCollection.items.endIndex
+        currentCollection.items.insert(.separator, at: index)
+        currentCollectionTableView.insertRows(at: [index], withAnimation: .effectFade)
     }
     
     @IBAction func switchAutoGrouping(_ sender: Any) {
-        let checkboxState = self.autoGroupingCheckboxButton.state == .on ? true : false
-        self.configureAutoGrouping(for: checkboxState)
+        let checkboxState = autoGroupingCheckboxButton.state == .on ? true : false
+        configureAutoGrouping(for: checkboxState)
     }
     
     // Save/Cancel Buttons Actions
     @IBAction func save(_ sender: Any) {
-        self.delegate?.settingsWindowController(self, didUpdate: collections)
-        self.close()
+        delegate?.settingsWindowController(self, didUpdate: collections)
+        close()
     }
     
     @IBAction func cancel(_ sender: Any) {
-        self.close()
+        close()
     }
     
     @IBAction func github(_ sender: Any) {
