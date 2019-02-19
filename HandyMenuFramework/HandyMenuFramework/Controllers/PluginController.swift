@@ -9,36 +9,29 @@
     
     // MARK: - Singletone instance
     @objc static let shared = PluginController()
+    private override init() { }
     
     // MARK: - Private Properties
-    private let settingsWindowController: SettingsWindowController
-    private let dataController: DataController
-    private let menuController: MenuController
-    private let shortcutController: ShortcutController
+    private let settingsWindowController = SettingsWindowController(windowNibName: .settingsWindowController)
+    private let shortcutController = ShortcutController()
     
     // MARK: - Plugin Lifecycle
-    private override init() {
-        self.settingsWindowController = SettingsWindowController(windowNibName: .settingsWindowController)
-        self.dataController = DataController()
-        self.menuController = MenuController()
-        self.shortcutController = ShortcutController()
-    }
-    
     @objc public func configure() {
-        self.settingsWindowController.delegate = self
-        self.shortcutController.delegate = self
-        self.dataController.delegate = self
-        self.dataController.load()
+        settingsWindowController.delegate = self
+        shortcutController.delegate = self
+        
+        DataController.shared.delegate = self
+        DataController.shared.load()
     }
     
     @objc public func showSettings() {
-        self.settingsWindowController.showWindow(nil)
+        settingsWindowController.showWindow(nil)
         shortcutController.stop()
     }
     
     @objc public func show(_ collection: String) {
-        self.showSettings()
-        self.settingsWindowController.showCollection(collection)
+        showSettings()
+        settingsWindowController.showCollection(collection)
     }
     
 }
@@ -47,9 +40,9 @@
 extension PluginController: DataControllerDelegate {
     
     func dataController(_ dataController: DataController, didUpdate data: PluginData) {
-        self.shortcutController.start()
-        self.menuController.configure(for: data.collections)
-        self.settingsWindowController.configure(data.collections)
+        shortcutController.start()
+        MenuController.shared.configure(for: data.collections)
+        settingsWindowController.configure(data.collections)
     }
     
     func dataController(_ dataController: DataController, didLoad installedPlugins: [InstalledPluginData]) {
@@ -65,9 +58,9 @@ extension PluginController: ShortcutControllerDelegate {
                             in event: NSEvent) -> NSEvent? {
         
         guard !NSDocumentController.shared.documents.isEmpty,
-            self.dataController.usedShortcuts.contains(shortcut.hashValue)
+            DataController.shared.usedShortcuts.contains(shortcut.hashValue)
             else { return event }
-        self.menuController.show(for: shortcut)
+        MenuController.shared.show(for: shortcut)
         return nil
     }
     
@@ -78,11 +71,11 @@ extension PluginController: SettingsWindowControllerDelegate {
     
     func settingsWindowController(_ settingsWindowController: SettingsWindowController,
                                   didUpdate menuData: [Collection]) {
-        self.dataController.saveCollections(menuData)
+        DataController.shared.saveCollections(menuData)
     }
     
     func settingsWindowControllerDidClose(_ settingsWindowController: SettingsWindowController) {
-        self.shortcutController.start()
+        shortcutController.start()
     }
     
 }

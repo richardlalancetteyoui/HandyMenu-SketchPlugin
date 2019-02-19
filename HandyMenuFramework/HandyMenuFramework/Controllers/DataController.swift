@@ -18,13 +18,16 @@ public protocol DataControllerDelegate: class {
 
 public class DataController {
     
+    // MARK: - Singleton
+    public static var shared = DataController()
+    
     // MARK: - Private Properties
-    private var pluginData: PluginData?
-    private var installedPlugins: [InstalledPluginData]
     private var sketchCommands: [String]
     private var dataCaretaker: DataCaretaker
     
     // MARK: - Public Properties
+    public var pluginData: PluginData?
+    public var installedPlugins: [InstalledPluginData]
     public var usedShortcuts: Set<Int> {
         if let shortcutHashes = pluginData?.collections.compactMap({$0.shortcut.hashValue}) {
             return Set(shortcutHashes)

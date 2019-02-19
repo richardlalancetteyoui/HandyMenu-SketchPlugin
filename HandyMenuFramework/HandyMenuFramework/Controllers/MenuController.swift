@@ -7,6 +7,10 @@
 //
 public class MenuController {
     
+    // MARK: - Singleton
+    public static var shared = MenuController()
+    private init() {}
+    
     // MARK: - Private Variables
     private var menus = [Int: NSMenu]()
     
